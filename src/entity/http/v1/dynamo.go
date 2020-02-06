@@ -1,7 +1,5 @@
 package v1
 
-import "time"
-
 // DynamoItem ..
 type DynamoItem struct {
 	ID              string `json:"id"`
