@@ -22,7 +22,7 @@ func AwsHAndler() *Aws {
 type AwsInterface interface {
 	InputDynamo(itemDynamo *dynamoEntyty.DynamoItem) (*dynamodb.PutItemOutput, error)
 	UpdateDynamo(ID string, itemDynamo *dynamoEntyty.DynamoItem) (*dynamodb.UpdateItemOutput, error)
-	GetDynamoData(ID string) (map[string]*dynamodb.AttributeValue, error)
+	GetDynamoData(ID string) (*dynamodb.GetItemOutput, error)
 	GetDynamoHistory(receiverAddress string) (*dynamodb.ScanOutput, error)
 }
 

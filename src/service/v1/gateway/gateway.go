@@ -45,12 +45,12 @@ func (gateway *Gateway) GetHistory(msisdn string) (string, error) {
 // GetByID ...
 func (gateway *Gateway) GetByID(ID string) (*entity.DynamoItem, error) {
 	data, err := gateway.AwsLib.GetDynamoData(ID)
-	dynamoItem := entity.Testing{}
-	fmt.Println(data)
-	err = dynamodbattribute.UnmarshalMap(data, &dynamoItem)
+	fmt.Println(data.Item)
+	dynamoItem := make(map[string]*string)
+	err = dynamodbattribute.UnmarshalMap(data.Item, &dynamoItem)
 	if err != nil {
 		return nil, err
 	}
-
+	fmt.Println(dynamoItem)
 	return nil, err
 }

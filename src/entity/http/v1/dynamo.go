@@ -9,8 +9,3 @@ type DynamoItem struct {
 	StatusText      string
 	Type            string
 }
-
-// Testing ...
-type Testing struct {
-	ID string `dynamo:"id"`
-}

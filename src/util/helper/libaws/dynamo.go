@@ -1,7 +1,6 @@
 package libaws
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -65,9 +64,22 @@ func (aw *Aws) UpdateDynamo(ID string, itemDynamo *dynamoEntyty.DynamoItem) (*dy
 }
 
 // GetDynamoData ..
-func (aw *Aws) GetDynamoData(ID string) (map[string]*dynamodb.AttributeValue, error) {
+func (aw *Aws) GetDynamoData(ID string) (*dynamodb.GetItemOutput, error) {
 	dynamoLibs := aw.GetDynamoDB()
-	fmt.Println(ID)
+	proj := expression.NamesList(
+		expression.Name("id"),
+		expression.Name("history"),
+		expression.Name("data"),
+		expression.Name("receiverAddress"),
+		expression.Name("createdAt"),
+		expression.Name("statusText"),
+		expression.Name("type"),
+		expression.Name("updatedAt"),
+	)
+	expr, err := expression.NewBuilder().WithProjection(proj).Build()
+	if err != nil {
+		return nil, err
+	}
 	result, err := dynamoLibs.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(os.Getenv("AWS_DYNAMO_TABLE")),
 		Key: map[string]*dynamodb.AttributeValue{
@@ -75,8 +87,9 @@ func (aw *Aws) GetDynamoData(ID string) (map[string]*dynamodb.AttributeValue, er
 				S: aws.String(ID),
 			},
 		},
+		ProjectionExpression: expr.Projection(),
 	})
-	return result.Item, err
+	return result, err
 }
 
 // GetDynamoHistory ..
