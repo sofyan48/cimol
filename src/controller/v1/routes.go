@@ -3,6 +3,8 @@ package users
 import (
 	"github.com/gin-gonic/gin"
 
+	ctrlNotif "github.com/sofyan48/rll-daemon-new/src/controller/v1/gateway"
+	svcNotif "github.com/sofyan48/rll-daemon-new/src/service/v1/gateway"
 	"github.com/sofyan48/rll-daemon-new/src/util/middleware"
 )
 
@@ -15,22 +17,22 @@ type V1RouterLoader struct {
 // @router: gin.Engine
 func (rLoader *V1RouterLoader) V1Router(router *gin.Engine) {
 
-	// Health Handler Routes
-	// healthHandler := &health.V1HealthController{
-	// 	HealthService: healthService.V1HealthCheckHandler(),
-	// }
+	// post Notif Handler Routes
+	postNotifHandler := &ctrlNotif.ControllerGateway{
+		ServiceGateway: *svcNotif.GatewayHandler(),
+	}
 
 	// //********* Calling Handler To Routers *********//
-	// rLoader.routerHealthCheck(router, healthHandler)
+	rLoader.routerPostNotification(router, postNotifHandler)
 
 }
 
 //********* Routing API *********//
 
-// routerDefinition Routes for event organizer | params
+// routerDefinition Routes
 // @router: gin Engine
-// @handler: HealthController
-// func (rLoader *V1RouterLoader) routerHealthCheck(router *gin.Engine, handler *health.V1HealthController) {
-// 	group := router.Group("v1/check")
-// 	group.GET("", handler.HealthCheck)
-// }
+// @handler: ControllerGateway
+func (rLoader *V1RouterLoader) routerPostNotification(router *gin.Engine, handler *ctrlNotif.ControllerGateway) {
+	group := router.Group("/v1/notification")
+	group.POST("", handler.PostNotification)
+}
