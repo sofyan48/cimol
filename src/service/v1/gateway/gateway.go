@@ -1,8 +1,6 @@
 package gateway
 
 import (
-	"fmt"
-
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
 	"github.com/sofyan48/rll-daemon-new/src/util/helper/libaws"
@@ -37,20 +35,20 @@ func (gateway *Gateway) PostNotification() *entity.PostNotificationResponse {
 }
 
 // GetHistory ...
-func (gateway *Gateway) GetHistory(msisdn string) (string, error) {
+func (gateway *Gateway) GetHistory(msisdn string) ([]entity.DynamoItemResponse, error) {
 	data, err := gateway.AwsLib.GetDynamoHistory(msisdn)
-	return data.GoString(), err
+	dynamoItem := []entity.DynamoItemResponse{}
+	err = dynamodbattribute.UnmarshalListOfMaps(data.Items, &dynamoItem)
+	return dynamoItem, err
 }
 
 // GetByID ...
-func (gateway *Gateway) GetByID(ID string) (*entity.DynamoItem, error) {
+func (gateway *Gateway) GetByID(ID string) (*entity.DynamoItemResponse, error) {
 	data, err := gateway.AwsLib.GetDynamoData(ID)
-	fmt.Println(data.Item)
-	dynamoItem := make(map[string]*string)
+	dynamoItem := &entity.DynamoItemResponse{}
 	err = dynamodbattribute.UnmarshalMap(data.Item, &dynamoItem)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(dynamoItem)
-	return nil, err
+	return dynamoItem, err
 }

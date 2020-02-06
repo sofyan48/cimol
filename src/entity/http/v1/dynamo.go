@@ -9,3 +9,13 @@ type DynamoItem struct {
 	StatusText      string
 	Type            string
 }
+
+// DynamoItemResponse ..
+type DynamoItemResponse struct {
+	ID              interface{} `json:"id"`
+	Data            interface{} `json:"data"`
+	History         interface{} `json:"history"`
+	ReceiverAddress interface{} `json:"receiverAddress"`
+	StatusText      interface{} `json:"statusText"`
+	Type            interface{} `json:"type"`
+}
