@@ -4,19 +4,31 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
 	service "github.com/sofyan48/rll-daemon-new/src/service/v1/gateway"
 	"github.com/sofyan48/rll-daemon-new/src/util/helper/rest"
 )
 
 // ControllerGateway ...
 type ControllerGateway struct {
-	ServiceGateway service.Gateway
+	ServiceGateway service.GatewayInterface
 }
 
 // PostNotification ...
 func (ctrl *ControllerGateway) PostNotification(context *gin.Context) {
-	postNotification := ctrl.ServiceGateway.PostNotification()
+	payload := &entity.PostNotificationRequest{}
+	err := context.ShouldBind(payload)
+	if err != nil {
+		rest.ResponseMessages(context, http.StatusBadRequest, err.Error())
+		return
+	}
+	postNotification, err := ctrl.ServiceGateway.PostNotification(payload)
+	if err != nil {
+		rest.ResponseMessages(context, http.StatusInternalServerError, err.Error())
+		return
+	}
 	rest.ResponseData(context, http.StatusOK, postNotification)
+	return
 }
 
 // GetHistory ...

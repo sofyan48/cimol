@@ -1,37 +1,41 @@
 package gateway
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
 	"github.com/sofyan48/rll-daemon-new/src/util/helper/libaws"
+	"github.com/sofyan48/rll-daemon-new/src/util/helper/request"
 )
 
 // Gateway ...
 type Gateway struct {
-	AwsLib libaws.AwsInterface
+	AwsLib    libaws.AwsInterface
+	Requester request.RequesterInterface
 }
 
 // GatewayHandler Handler
 func GatewayHandler() *Gateway {
 	return &Gateway{
-		AwsLib: libaws.AwsHAndler(),
+		AwsLib:    libaws.AwsHAndler(),
+		Requester: request.RequesterHandler(),
 	}
 }
 
 //GatewayInterface declare All Method
 type GatewayInterface interface {
-	PostNotification() *entity.PostNotificationResponse
-	GetHistory(msisdn string) (string, error)
-	GetByID(ID string) (string, error)
+	PostNotification(data *entity.PostNotificationRequest) (*entity.PostNotificationResponse, error)
+	GetHistory(msisdn string) ([]entity.DynamoItemResponse, error)
+	GetByID(ID string) (*entity.DynamoItemResponse, error)
 }
 
 // PostNotification ...
 // return *entity.PostNotificationResponse
-func (gateway *Gateway) PostNotification() *entity.PostNotificationResponse {
+func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest) (*entity.PostNotificationResponse, error) {
 	result := &entity.PostNotificationResponse{}
-	result.ID = "ID"
-	result.Status = "Status"
-	return result
+	fmt.Println(data.Payload.Msisdn)
+	return result, nil
 }
 
 // GetHistory ...

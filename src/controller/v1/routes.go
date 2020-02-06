@@ -5,6 +5,9 @@ import (
 
 	ctrlNotif "github.com/sofyan48/rll-daemon-new/src/controller/v1/gateway"
 	svcNotif "github.com/sofyan48/rll-daemon-new/src/service/v1/gateway"
+
+	ctrlRcv "github.com/sofyan48/rll-daemon-new/src/controller/v1/receivers"
+	svcRcv "github.com/sofyan48/rll-daemon-new/src/service/v1/receivers"
 	"github.com/sofyan48/rll-daemon-new/src/util/middleware"
 )
 
@@ -19,11 +22,17 @@ func (rLoader *V1RouterLoader) V1Router(router *gin.Engine) {
 
 	// post Notif Handler Routes
 	postNotifHandler := &ctrlNotif.ControllerGateway{
-		ServiceGateway: *svcNotif.GatewayHandler(),
+		ServiceGateway: svcNotif.GatewayHandler(),
+	}
+
+	// receivers
+	rcvHandler := &ctrlRcv.ControllerReceiver{
+		ServiceReceivers: svcRcv.ReceiverHandler(),
 	}
 
 	// //********* Calling Handler To Routers *********//
 	rLoader.routerPostNotification(router, postNotifHandler)
+	rLoader.routerReceiver(router, rcvHandler)
 
 }
 
@@ -37,4 +46,12 @@ func (rLoader *V1RouterLoader) routerPostNotification(router *gin.Engine, handle
 	group.POST("", handler.PostNotification)
 	group.GET("history/:receiverAddress", handler.GetHistory)
 	group.GET("id/:id", handler.GetByID)
+}
+
+// routerDefinition Routes
+// @router: gin Engine
+// @handler: ControllerReceiver
+func (rLoader *V1RouterLoader) routerReceiver(router *gin.Engine, handler *ctrlRcv.ControllerReceiver) {
+	group := router.Group("/v1/receiver")
+	group.POST("infobip", handler.InfobipReceiver)
 }
