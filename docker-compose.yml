@@ -1,0 +1,42 @@
+version: '3'
+services: 
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: 'boiler'
+      MYSQL_USER: 'boiler'
+      MYSQL_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ./mydb:/var/lib/mysql
+  rdcaches:
+    image: redis
+    command: ["redis-server"]
+    ports:
+      - "6379:6379"
+  api:
+    image: meongbego/review1
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - GIN_MODE=release
+      - SERVER_ADDRESS=0.0.0.0
+      - SERVER_PORT=3000
+      - SERVER_TIMEZONE=Asia/Jakarta
+      - DB_MYSQL_USERNAME=bigevent
+      - DB_MYSQL_PASSWORD=root
+      - DB_MYSQL_HOST=database
+      - DB_MYSQL_PORT=3306
+      - DB_MYSQL_DATABASE=bigevent
+      - REDIS_HOST=rdcaches
+      - REDIS_PORT=6379
+    command: ./main -e production
+    tty: true
+    depends_on:
+      - database
+      - rdcaches
