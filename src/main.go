@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/sofyan48/rll-daemon-new/src/config"
+	"github.com/sofyan48/rll-daemon-new/src/transmiter"
 
 	"github.com/joho/godotenv"
 	"github.com/sofyan48/rll-daemon-new/src/routes"
@@ -30,6 +31,10 @@ func main() {
 	}
 	flag.Parse()
 	ConfigEnvironment(*environment)
+
+	transmit := transmiter.GetTransmiter()
+	transmit.ConsumerTrans()
+
 	startApp()
 }
 
@@ -40,4 +45,5 @@ func startApp() {
 	serverPort := os.Getenv("SERVER_PORT")
 	serverString := fmt.Sprintf("%s:%s", serverHost, serverPort)
 	router.Run(serverString)
+
 }

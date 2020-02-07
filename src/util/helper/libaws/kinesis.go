@@ -33,18 +33,18 @@ func (aw *Aws) Send(data []byte, stack string, wg *sync.WaitGroup) (*kinesis.Put
 }
 
 // GetShardIterator ...
-func (aw *Aws) GetShardIterator() (*kinesis.GetShardIteratorOutput, error) {
+func (aw *Aws) GetShardIterator() (string, error) {
 	svc := aw.GetKinesis()
 	dsIter := &kinesis.GetShardIteratorInput{}
 	dsIter.SetStreamName(os.Getenv("KINESIS_STREAM_NAME"))
 	dsIter.SetShardId(os.Getenv("KINESIS_SHARD_ID"))
 	dsIter.SetShardIteratorType(os.Getenv("KINESIS_SHARD_TYPE"))
 	shardIter, err := svc.GetShardIterator(dsIter)
-	return shardIter, err
+	return *shardIter.ShardIterator, err
 }
 
-// GetRecord ...
-func (aw *Aws) GetRecord(data *kinesis.GetRecordsInput) (*kinesis.GetRecordsOutput, error) {
+// Consumer ...
+func (aw *Aws) Consumer(data *kinesis.GetRecordsInput) (*kinesis.GetRecordsOutput, error) {
 	svc := aw.GetKinesis()
 	records, err := svc.GetRecords(data)
 	return records, err

@@ -30,8 +30,8 @@ type AwsInterface interface {
 
 	// kinesis
 	Send(data []byte, stack string, wg *sync.WaitGroup) (*kinesis.PutRecordOutput, error)
-	GetShardIterator() (*kinesis.GetShardIteratorOutput, error)
-	GetRecord(data *kinesis.GetRecordsInput) (*kinesis.GetRecordsOutput, error)
+	GetShardIterator() (string, error)
+	Consumer(data *kinesis.GetRecordsInput) (*kinesis.GetRecordsOutput, error)
 	GetDescribeInput() *kinesis.DescribeStreamInput
 	Describe(data *kinesis.DescribeStreamInput) (*kinesis.DescribeStreamOutput, error)
 }
