@@ -1,7 +1,7 @@
 package v1
 
-// CallBackRequest ...
-type InfobipCallBackRequest struct {
+// InfobipResponse ...
+type InfobipResponse struct {
 	Messages []struct {
 		To     string `json:"to"`
 		Status struct {
@@ -15,13 +15,13 @@ type InfobipCallBackRequest struct {
 	} `json:"messages"`
 }
 
-// InfobipResponse ...
-type InfobipResponse struct {
-	Results []InfobipResponseChild
+// InfobipCallBackRequest ...
+type InfobipCallBackRequest struct {
+	Results []InfobipRequestChild
 }
 
-// InfobipResponseChild ...
-type InfobipResponseChild struct {
+// InfobipRequestChild ...
+type InfobipRequestChild struct {
 	BulkID     string
 	MessagesID string
 	To         string

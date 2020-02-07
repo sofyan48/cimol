@@ -1,7 +1,7 @@
 package gateway
 
 import (
-	"fmt"
+	"sync"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
@@ -25,17 +25,24 @@ func GatewayHandler() *Gateway {
 
 //GatewayInterface declare All Method
 type GatewayInterface interface {
-	PostNotification(data *entity.PostNotificationRequest) (*entity.PostNotificationResponse, error)
+	PostNotification(data *entity.PostNotificationRequest, wg *sync.WaitGroup)
 	GetHistory(msisdn string) ([]entity.DynamoItemResponse, error)
 	GetByID(ID string) (*entity.DynamoItemResponse, error)
 }
 
 // PostNotification ...
 // return *entity.PostNotificationResponse
-func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest) (*entity.PostNotificationResponse, error) {
-	result := &entity.PostNotificationResponse{}
-	fmt.Println(data.Payload.Msisdn)
-	return result, nil
+func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, wg *sync.WaitGroup) {
+	itemDynamo := &entity.DynamoItem{}
+	itemDynamo.Data = data.Payload.Text
+	itemDynamo.ReceiverAddress = data.Payload.Msisdn
+	itemDynamo.History = ""
+	itemDynamo.StatusText = "QUEUE"
+	itemDynamo.ID = data.UUID
+	itemDynamo.Type = data.Type
+	wg.Add(2)
+	go gateway.AwsLib.InputDynamo(itemDynamo, wg)
+	wg.Done()
 }
 
 // GetHistory ...

@@ -16,5 +16,6 @@ type PayloadPostNotificationRequest struct {
 // PostNotificationRequest ...
 type PostNotificationRequest struct {
 	Type    string                          `json:"type"`
+	UUID    string                          `json:"uuid"`
 	Payload *PayloadPostNotificationRequest `json:"payload"`
 }

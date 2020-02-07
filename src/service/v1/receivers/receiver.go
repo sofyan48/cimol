@@ -1,8 +1,12 @@
 package receivers
 
 import (
+	"fmt"
+
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
 	"github.com/sofyan48/rll-daemon-new/src/util/helper/libaws"
+	"github.com/sofyan48/rll-daemon-new/src/util/helper/provider"
 )
 
 // Receiver ...
@@ -19,16 +23,28 @@ func ReceiverHandler() *Receiver {
 
 // ReceiverInterface ...
 type ReceiverInterface interface {
-	InfobipReceiver(data *entity.InfobipCallBackRequest)
-	WavecellReceiver(data *entity.WavecelllCallBackRequest)
+	InfobipReceiver(ID string, data *entity.InfobipCallBackRequest) (string, error)
+	WavecellReceiver(ID string, data *entity.WavecelllCallBackRequest) (string, error)
 }
 
 // InfobipReceiver ...
-func (rcv *Receiver) InfobipReceiver(data *entity.InfobipCallBackRequest) {
-
+func (rcv *Receiver) InfobipReceiver(ID string, data *entity.InfobipCallBackRequest) (string, error) {
+	dynamoItem := &entity.DynamoItemResponse{}
+	dynamoData, err := rcv.AwsLib.GetDynamoData(ID)
+	if err != nil {
+		return "", err
+	}
+	err = dynamodbattribute.UnmarshalMap(dynamoData.Item, &dynamoItem)
+	if err != nil {
+		return "", err
+	}
+	fmt.Println(provider.OperatorChecker("+6281390232808"))
+	// rcv.AwsLib.UpdateDynamo(ID, )
+	return "", nil
 }
 
 // WavecellReceiver ...
-func (rcv *Receiver) WavecellReceiver(data *entity.WavecelllCallBackRequest) {
-
+func (rcv *Receiver) WavecellReceiver(ID string, data *entity.WavecelllCallBackRequest) (string, error) {
+	fmt.Println(data)
+	return "", nil
 }

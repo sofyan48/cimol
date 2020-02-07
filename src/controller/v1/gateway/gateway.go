@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"net/http"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
@@ -16,18 +17,23 @@ type ControllerGateway struct {
 
 // PostNotification ...
 func (ctrl *ControllerGateway) PostNotification(context *gin.Context) {
+	// catatan manis untuk infobip jangan lupa untuk mengirim id dari log dynamo ke callback data
+
 	payload := &entity.PostNotificationRequest{}
 	err := context.ShouldBind(payload)
 	if err != nil {
 		rest.ResponseMessages(context, http.StatusBadRequest, err.Error())
 		return
 	}
-	postNotification, err := ctrl.ServiceGateway.PostNotification(payload)
-	if err != nil {
-		rest.ResponseMessages(context, http.StatusInternalServerError, err.Error())
-		return
-	}
-	rest.ResponseData(context, http.StatusOK, postNotification)
+
+	waitgroup := &sync.WaitGroup{}
+
+	ctrl.ServiceGateway.PostNotification(payload, waitgroup)
+
+	result := &entity.PostNotificationResponse{}
+	result.ID = payload.UUID
+	result.Status = "QUEUE"
+	rest.ResponseData(context, http.StatusOK, result)
 	return
 }
 

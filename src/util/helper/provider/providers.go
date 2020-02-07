@@ -1,0 +1,56 @@
+package provider
+
+type DataProvider struct {
+	Provider string
+	Name     string
+}
+
+// OperatorChecker ...
+func OperatorChecker(msisdn string) DataProvider {
+	msisdnReformat := string(msisdn[1:6])
+	operator := map[string]DataProvider{
+		"62811": {Provider: "telkomsel", Name: "kartu-halo"},
+		"62812": {Provider: "telkomsel", Name: "simpati"},
+		"62813": {Provider: "telkomsel", Name: "simpati"},
+		"62821": {Provider: "telkomsel", Name: "simpati"},
+		"62822": {Provider: "telkomsel", Name: "simpati"},
+		"62852": {Provider: "telkomsel", Name: "kartu-as"},
+		"62853": {Provider: "telkomsel", Name: "kartu-as"},
+		"62823": {Provider: "telkomsel", Name: "kartu-as"},
+		"62851": {Provider: "telkomsel", Name: "kartu-as"},
+		"62814": {Provider: "indosat", Name: "m2-broadband"},
+		"62815": {Provider: "indosat", Name: "matrix-mentari"},
+		"62816": {Provider: "indosat", Name: "matrix-mentari"},
+		"62855": {Provider: "indosat", Name: "matrix"},
+		"62856": {Provider: "indosat", Name: "im3"},
+		"62857": {Provider: "indosat", Name: "im3"},
+		"62858": {Provider: "indosat", Name: "mentari"},
+		"62817": {Provider: "xl", Name: "xl"},
+		"62818": {Provider: "xl", Name: "xl"},
+		"62819": {Provider: "xl", Name: "xl"},
+		"62859": {Provider: "xl", Name: "xl"},
+		"62877": {Provider: "xl", Name: "xl"},
+		"62878": {Provider: "xl", Name: "xl"},
+		"62838": {Provider: "axis", Name: "axis"},
+		"62831": {Provider: "axis", Name: "axis"},
+		"62832": {Provider: "axis", Name: "axis"},
+		"62833": {Provider: "axis", Name: "axis"},
+		"62892": {Provider: "three", Name: "three"},
+		"62893": {Provider: "three", Name: "three"},
+		"62895": {Provider: "three", Name: "three"},
+		"62896": {Provider: "three", Name: "three"},
+		"62897": {Provider: "three", Name: "three"},
+		"62898": {Provider: "three", Name: "three"},
+		"62899": {Provider: "three", Name: "three"},
+		"62881": {Provider: "smart", Name: "smartfren"},
+		"62882": {Provider: "smart", Name: "smartfren"},
+		"62883": {Provider: "smart", Name: "smartfren"},
+		"62884": {Provider: "smart", Name: "smartfren"},
+		"62885": {Provider: "smart", Name: "smartfren"},
+		"62886": {Provider: "smart", Name: "smartfren"},
+		"62887": {Provider: "smart", Name: "smartfren"},
+		"62888": {Provider: "smart", Name: "smartfren"},
+		"62889": {Provider: "smart", Name: "smartfren"},
+	}
+	return operator[msisdnReformat]
+}

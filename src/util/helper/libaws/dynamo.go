@@ -2,6 +2,7 @@ package libaws
 
 import (
 	"os"
+	"sync"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -20,7 +21,7 @@ func (aw *Aws) GetDynamoDB() *dynamodb.DynamoDB {
 }
 
 // InputDynamo ...
-func (aw *Aws) InputDynamo(itemDynamo *dynamoEntyty.DynamoItem) (*dynamodb.PutItemOutput, error) {
+func (aw *Aws) InputDynamo(itemDynamo *dynamoEntyty.DynamoItem, wg *sync.WaitGroup) (*dynamodb.PutItemOutput, error) {
 	dynamoLibs := aw.GetDynamoDB()
 	result := &dynamodb.PutItemOutput{}
 	mItem, err := dynamodbattribute.MarshalMap(itemDynamo)
@@ -35,6 +36,7 @@ func (aw *Aws) InputDynamo(itemDynamo *dynamoEntyty.DynamoItem) (*dynamodb.PutIt
 	if err != nil {
 		return result, err
 	}
+	wg.Done()
 	return result, nil
 }
 

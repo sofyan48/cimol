@@ -2,6 +2,7 @@ package libaws
 
 import (
 	"os"
+	"sync"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -20,7 +21,7 @@ func AwsHAndler() *Aws {
 
 // AwsInterface ...
 type AwsInterface interface {
-	InputDynamo(itemDynamo *dynamoEntyty.DynamoItem) (*dynamodb.PutItemOutput, error)
+	InputDynamo(itemDynamo *dynamoEntyty.DynamoItem, wg *sync.WaitGroup) (*dynamodb.PutItemOutput, error)
 	UpdateDynamo(ID string, itemDynamo *dynamoEntyty.DynamoItem) (*dynamodb.UpdateItemOutput, error)
 	GetDynamoData(ID string) (*dynamodb.GetItemOutput, error)
 	GetDynamoHistory(receiverAddress string) (*dynamodb.ScanOutput, error)
