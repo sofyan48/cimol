@@ -1,6 +1,7 @@
 package gateway
 
 import (
+	"encoding/json"
 	"sync"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
@@ -33,7 +34,6 @@ type GatewayInterface interface {
 // PostNotification ...
 // return *entity.PostNotificationResponse
 func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, wg *sync.WaitGroup) {
-	wg.Add(2)
 	itemDynamo := &entity.DynamoItem{}
 	itemDynamo.Data = data.Payload.Text
 	itemDynamo.ReceiverAddress = data.Payload.Msisdn
@@ -41,12 +41,18 @@ func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, w
 	itemDynamo.StatusText = "QUEUE"
 	itemDynamo.ID = data.UUID
 	itemDynamo.Type = data.Type
-	go gateway.AwsLib.InputDynamo(itemDynamo, wg)
+
 	stateFulData := &entity.StateFullKinesis{}
 	stateFulData.Data = itemDynamo
 	stateFulData.Status = "interceptors"
 	stateFulData.Stack = "onGoing"
-	wg.Done()
+
+	sendData, _ := json.Marshal(stateFulData)
+	wg.Add(2)
+	go gateway.AwsLib.Send(sendData, "interceptors", wg)
+
+	wg.Add(2)
+	go gateway.AwsLib.InputDynamo(itemDynamo, wg)
 
 }
 

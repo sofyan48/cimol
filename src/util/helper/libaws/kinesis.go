@@ -1,7 +1,9 @@
 package libaws
 
 import (
+	"log"
 	"os"
+	"sync"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kinesis"
@@ -10,20 +12,23 @@ import (
 // GetKinesis get dynamodb service
 // return *kinesis.Kinesis
 func (aw *Aws) GetKinesis() *kinesis.Kinesis {
-	cfg := aw.Sessions()
+	cfg := aw.SessionsKinesis()
 	kinesis := kinesis.New(session.New(), cfg)
 	return kinesis
 }
 
-// GetMessagesInput ...
-func (aw *Aws) GetMessagesInput() *kinesis.PutRecordInput {
-	return &kinesis.PutRecordInput{}
-}
-
 // Send ...
-func (aw *Aws) Send(data *kinesis.PutRecordInput) (*kinesis.PutRecordOutput, error) {
+func (aw *Aws) Send(data []byte, stack string, wg *sync.WaitGroup) (*kinesis.PutRecordOutput, error) {
 	svc := aw.GetKinesis()
-	req, err := svc.PutRecord(data)
+	dataSend := &kinesis.PutRecordInput{}
+	dataSend.SetStreamName(os.Getenv("KINESIS_STREAM_NAME"))
+	dataSend.SetPartitionKey(stack)
+	dataSend.SetData(data)
+	req, err := svc.PutRecord(dataSend)
+	if err != nil {
+		log.Println(err)
+	}
+	wg.Done()
 	return req, err
 }
 
