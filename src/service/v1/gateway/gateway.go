@@ -33,6 +33,7 @@ type GatewayInterface interface {
 // PostNotification ...
 // return *entity.PostNotificationResponse
 func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, wg *sync.WaitGroup) {
+	wg.Add(2)
 	itemDynamo := &entity.DynamoItem{}
 	itemDynamo.Data = data.Payload.Text
 	itemDynamo.ReceiverAddress = data.Payload.Msisdn
@@ -40,9 +41,13 @@ func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, w
 	itemDynamo.StatusText = "QUEUE"
 	itemDynamo.ID = data.UUID
 	itemDynamo.Type = data.Type
-	wg.Add(2)
 	go gateway.AwsLib.InputDynamo(itemDynamo, wg)
+	stateFulData := &entity.StateFullKinesis{}
+	stateFulData.Data = itemDynamo
+	stateFulData.Status = "interceptors"
+	stateFulData.Stack = "onGoing"
 	wg.Done()
+
 }
 
 // GetHistory ...

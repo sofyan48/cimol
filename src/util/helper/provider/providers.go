@@ -5,9 +5,21 @@ type DataProvider struct {
 	Name     string
 }
 
+func serializeNumber(msisdn string) string {
+	if string(msisdn[0:2]) == "08" {
+		return "62" + string(msisdn[:14])
+	} else if string(msisdn[0:3]) == "+62" {
+		return "62" + string(msisdn[3:14])
+	} else if string(msisdn[0:2]) == "8" {
+		return "62" + string(msisdn[3:14])
+	}
+	return ""
+}
+
 // OperatorChecker ...
 func OperatorChecker(msisdn string) DataProvider {
-	msisdnReformat := string(msisdn[1:6])
+	msidmsisdnSerial := serializeNumber(msisdn)
+	msisdnReformat := string(msidmsisdnSerial[0:5])
 	operator := map[string]DataProvider{
 		"62811": {Provider: "telkomsel", Name: "kartu-halo"},
 		"62812": {Provider: "telkomsel", Name: "simpati"},
