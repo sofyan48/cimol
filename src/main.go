@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/sofyan48/rll-daemon-new/src/config"
 	"github.com/sofyan48/rll-daemon-new/src/transmiter"
@@ -31,9 +32,10 @@ func main() {
 	}
 	flag.Parse()
 	ConfigEnvironment(*environment)
-
+	wg := &sync.WaitGroup{}
 	transmit := transmiter.GetTransmiter()
-	transmit.ConsumerTrans()
+	wg.Add(2)
+	go transmit.ConsumerTrans(wg)
 
 	startApp()
 }
