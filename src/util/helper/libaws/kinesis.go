@@ -1,12 +1,14 @@
 package libaws
 
 import (
+	"encoding/json"
 	"log"
 	"os"
 	"sync"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kinesis"
+	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
 )
 
 // GetKinesis get dynamodb service
@@ -15,6 +17,28 @@ func (aw *Aws) GetKinesis() *kinesis.Kinesis {
 	cfg := aw.SessionsKinesis()
 	kinesis := kinesis.New(session.New(), cfg)
 	return kinesis
+}
+
+// SendStart ...
+func (aw *Aws) SendStart(ID string, itemDynamo *entity.DynamoItem, stack string, wg *sync.WaitGroup) {
+	data, err := json.Marshal(itemDynamo)
+	if err != nil {
+		log.Println(err)
+	}
+	svc := aw.GetKinesis()
+	dataSend := &kinesis.PutRecordInput{}
+	dataSend.SetStreamName(os.Getenv("KINESIS_STREAM_NAME"))
+	dataSend.SetPartitionKey(stack)
+	dataSend.SetData(data)
+	result, err := svc.PutRecord(dataSend)
+	if err != nil {
+		log.Println(err)
+	}
+	var dataShard []string = []string{result.GoString()}
+	itemDynamo.History = dataShard
+	aw.UpdateDynamo(ID, itemDynamo)
+	wg.Done()
+	return
 }
 
 // Send ...

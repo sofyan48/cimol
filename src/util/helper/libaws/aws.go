@@ -29,6 +29,7 @@ type AwsInterface interface {
 	GetDynamoHistory(receiverAddress string) (*dynamodb.ScanOutput, error)
 
 	// kinesis
+	SendStart(ID string, itemDynamo *dynamoEntyty.DynamoItem, stack string, wg *sync.WaitGroup)
 	Send(data []byte, stack string, wg *sync.WaitGroup) (*kinesis.PutRecordOutput, error)
 	GetShardIterator() (string, error)
 	Consumer(data *kinesis.GetRecordsInput) (*kinesis.GetRecordsOutput, error)

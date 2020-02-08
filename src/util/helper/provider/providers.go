@@ -1,13 +1,27 @@
 package provider
 
+// DataProvider ...
 type DataProvider struct {
 	Provider string
 	Name     string
 }
 
+// Providers ...
+type Providers struct{}
+
+// ProvidersHandler ...
+func ProvidersHandler() *Providers {
+	return &Providers{}
+}
+
+// ProvidersInterface ...
+type ProvidersInterface interface {
+	OperatorChecker(msisdn string) DataProvider
+}
+
 func serializeNumber(msisdn string) string {
 	if string(msisdn[0:2]) == "08" {
-		return "62" + string(msisdn[:14])
+		return "62" + string(msisdn[1:12])
 	} else if string(msisdn[0:3]) == "+62" {
 		return "62" + string(msisdn[3:14])
 	} else if string(msisdn[0:2]) == "8" {
@@ -17,7 +31,7 @@ func serializeNumber(msisdn string) string {
 }
 
 // OperatorChecker ...
-func OperatorChecker(msisdn string) DataProvider {
+func (prv *Providers) OperatorChecker(msisdn string) DataProvider {
 	msidmsisdnSerial := serializeNumber(msisdn)
 	msisdnReformat := string(msidmsisdnSerial[0:5])
 	operator := map[string]DataProvider{

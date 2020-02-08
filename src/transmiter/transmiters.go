@@ -1,14 +1,12 @@
 package transmiter
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"sync"
 	"time"
 
 	"github.com/aws/aws-sdk-go/service/kinesis"
-	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
 	"github.com/sofyan48/rll-daemon-new/src/util/helper/libaws"
 )
 
@@ -32,21 +30,21 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 	}
 	msgInput := &kinesis.GetRecordsInput{}
 	msgInput.SetShardIterator(shardIterator)
-
+	msgInput.SetLimit(1)
 	for {
-		itemData := &entity.StateFullKinesis{}
-		data, err := trs.AwsLibs.Consumer(msgInput)
-		if err != nil {
-			log.Println(err)
-		}
-		for _, i := range data.Records {
-			err = json.Unmarshal(i.Data, itemData)
+		done := make(chan bool)
+		go func() {
+			data, err := trs.AwsLibs.Consumer(msgInput)
 			if err != nil {
 				log.Println(err)
 			}
-		}
-		fmt.Println(itemData)
-		fmt.Println(itemData.Data)
+			for _, i := range data.Records {
+				fmt.Println(string(i.Data))
+			}
+			close(done)
+			return
+		}()
+		<-done
 		time.Sleep(5 * time.Second)
 	}
 

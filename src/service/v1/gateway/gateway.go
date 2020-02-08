@@ -1,26 +1,25 @@
 package gateway
 
 import (
-	"encoding/json"
 	"sync"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
 	"github.com/sofyan48/rll-daemon-new/src/util/helper/libaws"
-	"github.com/sofyan48/rll-daemon-new/src/util/helper/request"
+	"github.com/sofyan48/rll-daemon-new/src/util/helper/provider"
 )
 
 // Gateway ...
 type Gateway struct {
 	AwsLib    libaws.AwsInterface
-	Requester request.RequesterInterface
+	Providers provider.ProvidersInterface
 }
 
 // GatewayHandler Handler
 func GatewayHandler() *Gateway {
 	return &Gateway{
 		AwsLib:    libaws.AwsHAndler(),
-		Requester: request.RequesterHandler(),
+		Providers: provider.ProvidersHandler(),
 	}
 }
 
@@ -37,7 +36,7 @@ func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, w
 	itemDynamo := &entity.DynamoItem{}
 	itemDynamo.Data = data.Payload.Text
 	itemDynamo.ReceiverAddress = data.Payload.Msisdn
-	itemDynamo.History = ""
+
 	itemDynamo.StatusText = "QUEUE"
 	itemDynamo.ID = data.UUID
 	itemDynamo.Type = data.Type
@@ -47,9 +46,20 @@ func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, w
 	stateFulData.Status = "interceptors"
 	stateFulData.Stack = "onGoing"
 
-	sendData, _ := json.Marshal(stateFulData)
 	wg.Add(2)
-	go gateway.AwsLib.Send(sendData, "interceptors", wg)
+	go gateway.AwsLib.SendStart(data.UUID, itemDynamo, "interceptors", wg)
+
+	// dataThirdParty := make([]entity.ThirdPartySMS, 0)
+	// err := json.Unmarshal([]byte(os.Getenv("SMS_ORDER_CONF")), &dataThirdParty)
+	// if err != nil {
+	// 	log.Println(err)
+	// }
+	// operator := gateway.Providers.OperatorChecker(data.Payload.Msisdn)
+	// if operator.Name == "xl" {
+	// 	itemDynamo.History = map[string]*string{
+	// 		"wavecell": [],
+	// 	}
+	// }
 
 	wg.Add(2)
 	go gateway.AwsLib.InputDynamo(itemDynamo, wg)

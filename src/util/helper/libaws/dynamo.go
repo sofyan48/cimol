@@ -46,17 +46,21 @@ func (aw *Aws) UpdateDynamo(ID string, itemDynamo *dynamoEntyty.DynamoItem) (*dy
 	input := &dynamodb.UpdateItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": {
-				N: aws.String(ID),
+				S: aws.String(ID),
 			},
 		},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":valhistory": {
-				N: aws.String(itemDynamo.History),
+				SS: aws.StringSlice(itemDynamo.History),
+			},
+			":valstatusText": {
+				S: aws.String(itemDynamo.StatusText),
 			},
 		},
+
 		TableName:        aws.String(os.Getenv("AWS_DYNAMO_TABLE")),
 		ReturnValues:     aws.String("ALL_NEW"),
-		UpdateExpression: aws.String("SET #hsty = :valhistory, #sts = :valstatusText, updatedAt = :updatedAt"),
+		UpdateExpression: aws.String("SET history = :valhistory, statusText = :valstatusText"),
 	}
 	result, err := dynamoLibs.UpdateItem(input)
 	if err != nil {

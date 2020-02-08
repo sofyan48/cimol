@@ -2,12 +2,12 @@ package v1
 
 // DynamoItem ..
 type DynamoItem struct {
-	ID              string `json:"id"`
-	Data            string `json:"data"`
-	History         string `json:"history"`
-	ReceiverAddress string `json:"receiverAddress"`
-	StatusText      string `json:"statusText"`
-	Type            string `json:"type"`
+	ID              string   `json:"id"`
+	Data            string   `json:"data"`
+	History         []string `json:"history"`
+	ReceiverAddress string   `json:"receiverAddress"`
+	StatusText      string   `json:"statusText"`
+	Type            string   `json:"type"`
 }
 
 // DynamoItemResponse ..
