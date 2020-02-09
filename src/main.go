@@ -34,6 +34,7 @@ func main() {
 	ConfigEnvironment(*environment)
 	wg := &sync.WaitGroup{}
 	transmit := transmiter.GetTransmiter()
+	// transmit.ConsumerTrans(wg)
 	wg.Add(3)
 	go transmit.ConsumerTrans(wg)
 	startApp()

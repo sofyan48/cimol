@@ -3,6 +3,7 @@ package transmiter
 import (
 	"fmt"
 	"log"
+	"os"
 	"sync"
 	"time"
 
@@ -28,12 +29,20 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 	if err != nil {
 		log.Println(err)
 	}
-	msgInput := &kinesis.GetRecordsInput{}
-	msgInput.SetShardIterator(shardIterator)
-	msgInput.SetLimit(1)
+
+	describeInput := trs.AwsLibs.GetDescribeInput()
+	describeInput.SetStreamName("notification")
+	describeInput.SetExclusiveStartShardId(os.Getenv("KINESIS_SHARD_ID"))
 	for {
+		err := trs.AwsLibs.WaitUntil(describeInput)
+		if err != nil {
+			log.Println("error Wait: ", err)
+		}
 		done := make(chan bool)
 		go func() {
+			msgInput := &kinesis.GetRecordsInput{}
+			msgInput.SetShardIterator(shardIterator)
+			msgInput.SetLimit(1)
 			data, err := trs.AwsLibs.Consumer(msgInput)
 			if err != nil {
 				log.Println(err)
@@ -42,6 +51,7 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 				fmt.Println(string(i.Data))
 			}
 			close(done)
+			shardIterator = *data.NextShardIterator
 			return
 		}()
 		<-done

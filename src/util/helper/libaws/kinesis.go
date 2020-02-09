@@ -85,3 +85,15 @@ func (aw *Aws) Describe(data *kinesis.DescribeStreamInput) (*kinesis.DescribeStr
 	descData, err := svc.DescribeStream(data)
 	return descData, err
 }
+
+// WaitUntil ...
+func (aw *Aws) WaitUntil(data *kinesis.DescribeStreamInput) error {
+	kc := aw.GetKinesis()
+	return kc.WaitUntilStreamExists(data)
+}
+
+// WaitUntilNotExist ...
+func (aw *Aws) WaitUntilNotExist(data *kinesis.DescribeStreamInput) error {
+	kc := aw.GetKinesis()
+	return kc.WaitUntilStreamNotExists(data)
+}
