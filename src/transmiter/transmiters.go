@@ -9,17 +9,20 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	"github.com/sofyan48/rll-daemon-new/src/util/helper/libaws"
+	"github.com/sofyan48/rll-daemon-new/src/util/helper/provider"
 )
 
 // Transmiter ...
 type Transmiter struct {
-	AwsLibs libaws.AwsInterface
+	AwsLibs  libaws.AwsInterface
+	Provider provider.ProvidersInterface
 }
 
 // GetTransmiter ...
 func GetTransmiter() *Transmiter {
 	return &Transmiter{
-		AwsLibs: libaws.AwsHAndler(),
+		AwsLibs:  libaws.AwsHAndler(),
+		Provider: provider.ProvidersHandler(),
 	}
 }
 
@@ -61,7 +64,9 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 
 }
 
-func intercepActionShard() {}
+func (trs *Transmiter) intercepActionShard() {
+
+}
 
 func infobipActionShard() {}
 

@@ -6,3 +6,9 @@ type StateFullKinesis struct {
 	Status string      `json:"queue"`
 	Stack  string      `json:"stack"`
 }
+
+// DataProvider ...
+type DataProvider struct {
+	Provider string
+	Name     string
+}

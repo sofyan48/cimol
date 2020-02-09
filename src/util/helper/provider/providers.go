@@ -1,10 +1,8 @@
 package provider
 
-// DataProvider ...
-type DataProvider struct {
-	Provider string
-	Name     string
-}
+import (
+	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
+)
 
 // Providers ...
 type Providers struct{}
@@ -16,7 +14,8 @@ func ProvidersHandler() *Providers {
 
 // ProvidersInterface ...
 type ProvidersInterface interface {
-	OperatorChecker(msisdn string) DataProvider
+	OperatorChecker(msisdn string) *entity.DataProvider
+	InterceptorMessages(data *entity.PostNotificationRequest) *entity.DynamoItem
 }
 
 func serializeNumber(msisdn string) string {
@@ -31,10 +30,10 @@ func serializeNumber(msisdn string) string {
 }
 
 // OperatorChecker ...
-func (prv *Providers) OperatorChecker(msisdn string) DataProvider {
+func (prv *Providers) OperatorChecker(msisdn string) *entity.DataProvider {
 	msidmsisdnSerial := serializeNumber(msisdn)
 	msisdnReformat := string(msidmsisdnSerial[0:5])
-	operator := map[string]DataProvider{
+	operator := map[string]*entity.DataProvider{
 		"62811": {Provider: "telkomsel", Name: "kartu-halo"},
 		"62812": {Provider: "telkomsel", Name: "simpati"},
 		"62813": {Provider: "telkomsel", Name: "simpati"},

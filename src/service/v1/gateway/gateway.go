@@ -33,14 +33,7 @@ type GatewayInterface interface {
 // PostNotification ...
 // return *entity.PostNotificationResponse
 func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, wg *sync.WaitGroup) {
-	itemDynamo := &entity.DynamoItem{}
-	itemDynamo.Data = data.Payload.Text
-	itemDynamo.ReceiverAddress = data.Payload.Msisdn
-
-	itemDynamo.StatusText = "QUEUE"
-	itemDynamo.ID = data.UUID
-	itemDynamo.Type = data.Type
-
+	itemDynamo := gateway.Providers.InterceptorMessages(data)
 	stateFulData := &entity.StateFullKinesis{}
 	stateFulData.Data = itemDynamo
 	stateFulData.Status = "interceptors"
@@ -48,18 +41,6 @@ func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, w
 
 	wg.Add(2)
 	go gateway.AwsLib.SendStart(data.UUID, itemDynamo, "interceptors", wg)
-
-	// dataThirdParty := make([]entity.ThirdPartySMS, 0)
-	// err := json.Unmarshal([]byte(os.Getenv("SMS_ORDER_CONF")), &dataThirdParty)
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-	// operator := gateway.Providers.OperatorChecker(data.Payload.Msisdn)
-	// if operator.Name == "xl" {
-	// 	itemDynamo.History = map[string]*string{
-	// 		"wavecell": [],
-	// 	}
-	// }
 
 	wg.Add(2)
 	go gateway.AwsLib.InputDynamo(itemDynamo, wg)

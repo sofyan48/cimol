@@ -51,7 +51,7 @@ func (aw *Aws) UpdateDynamo(ID string, itemDynamo *dynamoEntyty.DynamoItem) (*dy
 		},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":valhistory": {
-				SS: aws.StringSlice(itemDynamo.History),
+				SS: aws.StringSlice([]string{}),
 			},
 			":valstatusText": {
 				S: aws.String(itemDynamo.StatusText),
