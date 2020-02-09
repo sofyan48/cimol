@@ -38,3 +38,5 @@ tmp
 
 # go sum
 go.sum
+
+log

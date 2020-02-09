@@ -42,13 +42,14 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 		go func() {
 			msgInput := &kinesis.GetRecordsInput{}
 			msgInput.SetShardIterator(shardIterator)
-			msgInput.SetLimit(1)
+			// msgInput.SetLimit(1)
 			data, err := trs.AwsLibs.Consumer(msgInput)
 			if err != nil {
 				log.Println(err)
 			}
 			for _, i := range data.Records {
-				fmt.Println(string(i.Data))
+				fmt.Println("Shard Data: ", data.String())
+				fmt.Println("Kinesis Data", string(i.Data))
 			}
 			close(done)
 			shardIterator = *data.NextShardIterator
@@ -59,3 +60,9 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 	}
 
 }
+
+func intercepActionShard() {}
+
+func infobipActionShard() {}
+
+func wavecellActionShard() {}
