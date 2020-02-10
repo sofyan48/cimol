@@ -93,11 +93,11 @@ func (trs *Transmiter) intercepActionShard(data *entity.DynamoItem) {
 			break
 		}
 	}
-	trs.infobipActionShard(historyProvider, history)
+	trs.wavecellActionShard(historyProvider, history)
 
 }
 
-func (trs *Transmiter) infobipActionShard(history string, payload *entity.HistoryItem) {
+func (trs *Transmiter) infobipActionShardOTP(history string, payload *entity.HistoryItem) {
 	dest := entity.InfobipDestination{}
 	dest.To = payload.Payload.Msisdn
 	destination := []entity.InfobipDestination{dest}
@@ -117,7 +117,6 @@ func (trs *Transmiter) infobipActionShard(history string, payload *entity.Histor
 	if err != nil {
 		log.Println("Error: ", err)
 	}
-	fmt.Println(string(reformatPayload))
 	username := os.Getenv("INFOBIP_USERNAME")
 	password := os.Getenv("INFOBIP_PASSWORD")
 	client, err := trs.Requester.CLIENT("POST", os.Getenv("INFOBIP_SEND_SMS_URL"), reformatPayload)
@@ -131,11 +130,43 @@ func (trs *Transmiter) infobipActionShard(history string, payload *entity.Histor
 	if err != nil {
 		log.Println("Infobip Transmitter: ", err)
 	}
+	fmt.Println(response.Status)
+	fmt.Println(response.StatusCode)
 	body, err := ioutil.ReadAll(response.Body)
 	s := string(body)
 	fmt.Println(s)
 }
 
-func (trs *Transmiter) wavecellActionShard() {
+func (trs *Transmiter) wavecellActionShard(history string, payload *entity.HistoryItem) {
+	reformatPayload := &entity.WavecellRequest{}
+	reformatPayload.Destination = payload.Payload.Msisdn
+	reformatPayload.Source = os.Getenv("WAVECELL_ACC_ID")
+	reformatPayload.Text = payload.Payload.Text
+	reformatPayload.DLRCallback = os.Getenv("WAVECELL_CALLBACK_URL")
+	wavecelSendURL := "https://api.wavecell.com/sms/v1/" + os.Getenv("WAVECELL_SUB_ACC_ID_GENERAL") + "/single"
+	if payload.Payload.OTP == true {
+		wavecelSendURL = "https://api.wavecell.com/sms/v1/" + os.Getenv("WAVECELL_SUB_ACC_ID") + "/single"
+	}
+	wavecellReformatPayload, err := json.Marshal(reformatPayload)
+	client, err := trs.Requester.CLIENT("POST", wavecelSendURL, wavecellReformatPayload)
+	if err != nil {
+		log.Println("Error: ", err)
+	}
+	requester := &http.Client{}
+	client.Header.Set("Content-Type", "application/json")
+	client.Header.Set("Authorization", "Bearer "+os.Getenv("WAVECELL_ACC_TOKEN"))
+	response, err := requester.Do(client)
+	if err != nil {
+		log.Println("Wavecell Transmitter: ", err)
+	}
+	fmt.Println(response.Status)
+	fmt.Println(response.StatusCode)
+	body, err := ioutil.ReadAll(response.Body)
+	s := string(body)
+	fmt.Println(s)
+}
+
+// UpdateDynamoTransmitt ...
+func UpdateDynamoTransmitt() {
 
 }

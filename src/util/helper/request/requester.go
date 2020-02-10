@@ -59,6 +59,7 @@ func (request *Requester) POST(url, auth string, payload []byte) ([]byte, error)
 		return result, err
 	}
 	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+auth)
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {

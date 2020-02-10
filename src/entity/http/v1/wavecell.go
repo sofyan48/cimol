@@ -22,3 +22,10 @@ type WavecelllCallBackRequest struct {
 	} `json:"price"`
 	SmsCount uint `json:"smsCount"`
 }
+
+type WavecellRequest struct {
+	Source      string `json:"source"`
+	Destination string `json:"destination"`
+	Text        string `json:"text"`
+	DLRCallback string `json:"dlrCallbackUrl"`
+}
