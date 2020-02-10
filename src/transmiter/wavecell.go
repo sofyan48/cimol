@@ -39,9 +39,14 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 	}
 	wavecellResponse := &entity.WavecellResponse{}
 	json.Unmarshal(body, wavecellResponse)
+	bodyResult := map[string]string{
+		history: string(body),
+	}
+	bodyResultHistory, _ := json.Marshal(bodyResult)
+
 	_, err = trs.updateDynamoTransmitt(payload.CallbackData,
 		wavecellResponse.Status.Code,
-		string(body))
+		string(bodyResultHistory), payload)
 	if err != nil {
 		log.Println("Wavecell Transmitter Dynamo: ", err)
 	}

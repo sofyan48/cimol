@@ -1,6 +1,7 @@
 package libaws
 
 import (
+	"encoding/json"
 	"os"
 	"sync"
 
@@ -41,8 +42,9 @@ func (aw *Aws) InputDynamo(itemDynamo *dynamoEntyty.DynamoItem, wg *sync.WaitGro
 }
 
 // UpdateDynamo ...
-func (aw *Aws) UpdateDynamo(ID, status, data string) (*dynamodb.UpdateItemOutput, error) {
+func (aw *Aws) UpdateDynamo(ID, status, data string, history *dynamoEntyty.HistoryItem) (*dynamodb.UpdateItemOutput, error) {
 	dynamoLibs := aw.GetDynamoDB()
+	historyReformat, err := json.Marshal(history)
 	input := &dynamodb.UpdateItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"id": {
@@ -51,7 +53,10 @@ func (aw *Aws) UpdateDynamo(ID, status, data string) (*dynamodb.UpdateItemOutput
 		},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":valhistory": {
-				SS: aws.StringSlice([]string{data}),
+				SS: aws.StringSlice([]string{
+					data,
+					string(historyReformat),
+				}),
 			},
 			":valstatusText": {
 				S: aws.String(status),

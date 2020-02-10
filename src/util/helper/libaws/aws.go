@@ -24,7 +24,7 @@ func AwsHAndler() *Aws {
 type AwsInterface interface {
 	// dynamo
 	InputDynamo(itemDynamo *dynamoEntyty.DynamoItem, wg *sync.WaitGroup) (*dynamodb.PutItemOutput, error)
-	UpdateDynamo(ID, status, data string) (*dynamodb.UpdateItemOutput, error)
+	UpdateDynamo(ID, status, data string, history *dynamoEntyty.HistoryItem) (*dynamodb.UpdateItemOutput, error)
 	GetDynamoData(ID string) (*dynamodb.GetItemOutput, error)
 	GetDynamoHistory(receiverAddress string) (*dynamodb.ScanOutput, error)
 

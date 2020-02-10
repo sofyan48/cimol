@@ -73,8 +73,8 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 }
 
 // updateDynamoTransmitt ...
-func (trs *Transmiter) updateDynamoTransmitt(ID, status, data string) (string, error) {
-	result, err := trs.AwsLibs.UpdateDynamo(ID, status, data)
+func (trs *Transmiter) updateDynamoTransmitt(ID, status, data string, history *entity.HistoryItem) (string, error) {
+	result, err := trs.AwsLibs.UpdateDynamo(ID, status, data, history)
 	return result.GoString(), err
 }
 
