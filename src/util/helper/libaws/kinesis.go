@@ -34,9 +34,6 @@ func (aw *Aws) SendStart(ID string, itemDynamo *entity.DynamoItem, stack string,
 	if err != nil {
 		log.Println(err)
 	}
-	// var dataShard []string = []string{result.GoString()}
-	// itemDynamo.History = dataShard
-	// aw.UpdateDynamo(ID, itemDynamo)
 	wg.Done()
 	return
 }

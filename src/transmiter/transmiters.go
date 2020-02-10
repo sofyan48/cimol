@@ -1,6 +1,7 @@
 package transmiter
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -8,6 +9,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/service/kinesis"
+	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
 	"github.com/sofyan48/rll-daemon-new/src/util/helper/libaws"
 	"github.com/sofyan48/rll-daemon-new/src/util/helper/provider"
 )
@@ -45,14 +47,18 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 		go func() {
 			msgInput := &kinesis.GetRecordsInput{}
 			msgInput.SetShardIterator(shardIterator)
-			// msgInput.SetLimit(1)
+
 			data, err := trs.AwsLibs.Consumer(msgInput)
 			if err != nil {
 				log.Println(err)
 			}
+			itemDynamo := &entity.DynamoItem{}
 			for _, i := range data.Records {
-				fmt.Println("Shard Data: ", data.String())
-				fmt.Println("Kinesis Data", string(i.Data))
+				err := json.Unmarshal([]byte(string(i.Data)), itemDynamo)
+				if err != nil {
+					log.Println("Error: ", err)
+				}
+				trs.intercepActionShard(itemDynamo)
 			}
 			close(done)
 			shardIterator = *data.NextShardIterator
@@ -64,8 +70,12 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 
 }
 
-func (trs *Transmiter) intercepActionShard() {
-
+func (trs *Transmiter) intercepActionShard(data *entity.DynamoItem) {
+	if data.History["wavecell"] != nil {
+		fmt.Println("HISTORY OKE")
+	} else {
+		fmt.Println("HISTORY NULL")
+	}
 }
 
 func infobipActionShard() {}

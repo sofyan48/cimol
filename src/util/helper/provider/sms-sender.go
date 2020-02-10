@@ -8,6 +8,7 @@ import (
 	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
 )
 
+// InterceptorMessages ...
 func (prv *Providers) InterceptorMessages(data *entity.PostNotificationRequest) *entity.DynamoItem {
 	itemDynamo := &entity.DynamoItem{}
 	itemDynamo.Data = data.Payload.Text
@@ -25,8 +26,16 @@ func (prv *Providers) InterceptorMessages(data *entity.PostNotificationRequest) 
 
 	operator := prv.OperatorChecker(data.Payload.Msisdn)
 	if operator.Name == "xl" {
+		historyPayload := &entity.PayloadPostNotificationRequest{}
+		historyPayload.Msisdn = data.Payload.Msisdn
+		historyPayload.OTP = data.Payload.OTP
+		historyPayload.Text = data.Payload.Text
+		historyValue := &entity.HistoryItem{}
+		historyValue.CallbackData = itemDynamo.ID
+		historyValue.Payload = historyPayload
+		historyValue.Response = "interceptors"
 		history := map[string]*entity.HistoryItem{
-			"wavecell": &entity.HistoryItem{},
+			dataThirdParty[1].Provider: historyValue,
 		}
 		itemDynamo.History = history
 	}

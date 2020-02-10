@@ -34,6 +34,7 @@ type GatewayInterface interface {
 // return *entity.PostNotificationResponse
 func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, wg *sync.WaitGroup) {
 	itemDynamo := gateway.Providers.InterceptorMessages(data)
+
 	stateFulData := &entity.StateFullKinesis{}
 	stateFulData.Data = itemDynamo
 	stateFulData.Status = "interceptors"

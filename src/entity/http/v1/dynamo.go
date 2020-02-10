@@ -21,8 +21,8 @@ type DynamoItemResponse struct {
 }
 
 type HistoryItem struct {
-	DeliveryReport string `json:"delivery_report"`
-	Response       string `json:"response"`
-	CallbackData   string `json:"callback_data"`
-	Payload        string `json:"payload"`
+	DeliveryReport string                          `json:"delivery_report"`
+	Response       string                          `json:"response"`
+	CallbackData   string                          `json:"callback_data"`
+	Payload        *PayloadPostNotificationRequest `json:"payload"`
 }
