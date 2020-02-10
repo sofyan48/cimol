@@ -18,6 +18,16 @@ func RequesterHandler() *Requester {
 type RequesterInterface interface {
 	GET(url, authorization string) ([]byte, error)
 	POST(url, auth string, payload []byte) ([]byte, error)
+	CLIENT(method, url string, payload []byte) (*http.Request, error)
+}
+
+// CLIENT ...
+func (request *Requester) CLIENT(method, url string, payload []byte) (*http.Request, error) {
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+	if err != nil {
+		return req, err
+	}
+	return req, nil
 }
 
 // GET request type get

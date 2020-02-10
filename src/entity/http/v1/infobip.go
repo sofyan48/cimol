@@ -1,5 +1,25 @@
 package v1
 
+// InfobipRequestPayload ...
+type InfobipRequestPayload struct {
+	Messages []InfobipMessages `json:"messages"`
+}
+
+// InfobipMessages .../
+type InfobipMessages struct {
+	From             string               `json:"from"`
+	Destinations     []InfobipDestination `json:"destinations"`
+	Text             string               `json:"text"`
+	NotifyURL        string               `json:"notifyUrl"`
+	NotifyContenType string               `json:"notifyContentType"`
+	CallbackData     string               `json:"callbackData"`
+}
+
+// InfobipDestination ...
+type InfobipDestination struct {
+	To string `json:"to"`
+}
+
 // InfobipResponse ...
 type InfobipResponse struct {
 	Messages []struct {

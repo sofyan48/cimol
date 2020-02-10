@@ -14,7 +14,7 @@ func ProvidersHandler() *Providers {
 
 // ProvidersInterface ...
 type ProvidersInterface interface {
-	OperatorChecker(msisdn string) *entity.DataProvider
+	OperatorChecker(msisdn string) (*entity.DataProvider, string)
 	InterceptorMessages(data *entity.PostNotificationRequest) *entity.DynamoItem
 }
 
@@ -30,7 +30,7 @@ func serializeNumber(msisdn string) string {
 }
 
 // OperatorChecker ...
-func (prv *Providers) OperatorChecker(msisdn string) *entity.DataProvider {
+func (prv *Providers) OperatorChecker(msisdn string) (*entity.DataProvider, string) {
 	msidmsisdnSerial := serializeNumber(msisdn)
 	msisdnReformat := string(msidmsisdnSerial[0:5])
 	operator := map[string]*entity.DataProvider{
@@ -77,5 +77,5 @@ func (prv *Providers) OperatorChecker(msisdn string) *entity.DataProvider {
 		"62888": {Provider: "smart", Name: "smartfren"},
 		"62889": {Provider: "smart", Name: "smartfren"},
 	}
-	return operator[msisdnReformat]
+	return operator[msisdnReformat], msidmsisdnSerial
 }

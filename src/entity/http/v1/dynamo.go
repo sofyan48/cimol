@@ -20,7 +20,9 @@ type DynamoItemResponse struct {
 	Type            interface{} `json:"type"`
 }
 
+// HistoryItem ...
 type HistoryItem struct {
+	Provider       string                          `json:"provider"`
 	DeliveryReport string                          `json:"delivery_report"`
 	Response       string                          `json:"response"`
 	CallbackData   string                          `json:"callback_data"`

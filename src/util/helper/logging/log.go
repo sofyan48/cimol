@@ -10,7 +10,7 @@ import (
 
 // CreateLog ...
 func CreateLog(logging entity.Logging) {
-	if os.Getenv("LOG") == "local" {
+	if os.Getenv("APP_LOG") == "local" {
 		f, err := os.OpenFile("./log/log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if err != nil {
 			log.Fatalf("error opening file: %v", err)

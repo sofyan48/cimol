@@ -23,19 +23,26 @@ func (prv *Providers) InterceptorMessages(data *entity.PostNotificationRequest) 
 	if err != nil {
 		log.Println(err)
 	}
-
-	operator := prv.OperatorChecker(data.Payload.Msisdn)
+	operator, msisdn := prv.OperatorChecker(data.Payload.Msisdn)
+	historyPayload := &entity.PayloadPostNotificationRequest{}
+	historyPayload.Msisdn = msisdn
+	historyPayload.OTP = data.Payload.OTP
+	historyPayload.Text = data.Payload.Text
+	historyValue := &entity.HistoryItem{}
+	historyValue.CallbackData = itemDynamo.ID
+	historyValue.Payload = historyPayload
+	historyValue.Response = "interceptors"
 	if operator.Name == "xl" {
-		historyPayload := &entity.PayloadPostNotificationRequest{}
-		historyPayload.Msisdn = data.Payload.Msisdn
-		historyPayload.OTP = data.Payload.OTP
-		historyPayload.Text = data.Payload.Text
-		historyValue := &entity.HistoryItem{}
-		historyValue.CallbackData = itemDynamo.ID
-		historyValue.Payload = historyPayload
-		historyValue.Response = "interceptors"
+		historyValue.Provider = dataThirdParty[1].Provider
 		history := map[string]*entity.HistoryItem{
 			dataThirdParty[1].Provider: historyValue,
+		}
+		itemDynamo.History = history
+
+	} else {
+		historyValue.Provider = dataThirdParty[0].Provider
+		history := map[string]*entity.HistoryItem{
+			dataThirdParty[0].Provider: historyValue,
 		}
 		itemDynamo.History = history
 	}
