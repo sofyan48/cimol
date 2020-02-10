@@ -159,14 +159,26 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 	if err != nil {
 		log.Println("Wavecell Transmitter: ", err)
 	}
-	fmt.Println(response.Status)
-	fmt.Println(response.StatusCode)
+
 	body, err := ioutil.ReadAll(response.Body)
-	s := string(body)
-	fmt.Println(s)
+	if err != nil {
+		log.Println("Wavecell Transmitter: ", err)
+	}
+	wavecellResponse := &entity.WavecellResponse{}
+	json.Unmarshal(body, wavecellResponse)
+	_, err = trs.updateDynamoTransmitt(payload.CallbackData,
+		wavecellResponse.Status.Code,
+		string(body))
+	if err != nil {
+		log.Println("Wavecell Transmitter Dynamo: ", err)
+	}
 }
 
-// UpdateDynamoTransmitt ...
-func UpdateDynamoTransmitt() {
-
+// updateDynamoTransmitt ...
+func (trs *Transmiter) updateDynamoTransmitt(ID, status, data string) (string, error) {
+	result, err := trs.AwsLibs.UpdateDynamo(ID, status, data)
+	return result.GoString(), err
 }
+
+// TransferToShardReceiver ...
+func (trs *Transmiter) TransferToShardReceiver(historyString string) {}

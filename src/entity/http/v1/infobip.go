@@ -20,21 +20,6 @@ type InfobipDestination struct {
 	To string `json:"to"`
 }
 
-// InfobipResponse ...
-type InfobipResponse struct {
-	Messages []struct {
-		To     string `json:"to"`
-		Status struct {
-			GroupID     uint   `json:"groupId"`
-			GroupName   string `json:"groupName"`
-			ID          uint   `json:"id"`
-			Name        string `json:"name"`
-			Description string `json:"description"`
-		} `json:"status"`
-		MessageID string `json:"messageId"`
-	} `json:"messages"`
-}
-
 // InfobipCallBackRequest ...
 type InfobipCallBackRequest struct {
 	Results []InfobipRequestChild

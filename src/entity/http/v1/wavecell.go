@@ -23,9 +23,46 @@ type WavecelllCallBackRequest struct {
 	SmsCount uint `json:"smsCount"`
 }
 
+// WavecellRequest ...
 type WavecellRequest struct {
 	Source      string `json:"source"`
 	Destination string `json:"destination"`
 	Text        string `json:"text"`
 	DLRCallback string `json:"dlrCallbackUrl"`
+}
+
+// WavecellCallbackRequest ...
+type WavecellCallbackRequest struct {
+	Messages []WavecellCallbackMessages `json:"messages"`
+}
+
+// WavecellCallbackMessages ...
+type WavecellCallbackMessages struct {
+	To        string                   `json:"to"`
+	Status    []WavecellResponseStatus `json:"status"`
+	MessageID string                   `json:"messageId"`
+}
+
+// WavecellCallbackStatus ...
+type WavecellCallbackStatus struct {
+	GroupID     uint   `json:"groupId"`
+	GroupName   string `json:"groupName"`
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+// WavecellResponse ...
+type WavecellResponse struct {
+	UMID             string                  `json:"umid"`
+	ClientMessagesID string                  `json:"clientMessageId"`
+	Destination      string                  `json:"destination"`
+	Encoding         string                  `json:"encoding"`
+	Status           *WavecellResponseStatus `json:"status"`
+}
+
+// WavecellResponseStatus ...
+type WavecellResponseStatus struct {
+	Code        string `json:"code"`
+	Description string `json:"description"`
 }

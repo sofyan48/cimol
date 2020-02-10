@@ -41,7 +41,7 @@ func (aw *Aws) InputDynamo(itemDynamo *dynamoEntyty.DynamoItem, wg *sync.WaitGro
 }
 
 // UpdateDynamo ...
-func (aw *Aws) UpdateDynamo(ID string, itemDynamo *dynamoEntyty.DynamoItem) (*dynamodb.UpdateItemOutput, error) {
+func (aw *Aws) UpdateDynamo(ID, status, data string) (*dynamodb.UpdateItemOutput, error) {
 	dynamoLibs := aw.GetDynamoDB()
 	input := &dynamodb.UpdateItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
@@ -51,10 +51,10 @@ func (aw *Aws) UpdateDynamo(ID string, itemDynamo *dynamoEntyty.DynamoItem) (*dy
 		},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":valhistory": {
-				SS: aws.StringSlice([]string{}),
+				SS: aws.StringSlice([]string{data}),
 			},
 			":valstatusText": {
-				S: aws.String(itemDynamo.StatusText),
+				S: aws.String(status),
 			},
 		},
 
