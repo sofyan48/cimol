@@ -16,6 +16,13 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 	reformatPayload.Source = os.Getenv("WAVECELL_ACC_ID")
 	reformatPayload.Text = payload.Payload.Text
 	reformatPayload.DLRCallback = os.Getenv("WAVECELL_CALLBACK_URL")
+	if !checkEnvironment() {
+		_, err := trs.updateDynamoTransmitt(payload.CallbackData, "SENDED", "", payload)
+		if err != nil {
+			log.Println("Wavecell Transmitter Dynamo: ", err)
+		}
+		return
+	}
 	wavecelSendURL := "https://api.wavecell.com/sms/v1/" + os.Getenv("WAVECELL_SUB_ACC_ID_GENERAL") + "/single"
 	if payload.Payload.OTP == true {
 		wavecelSendURL = "https://api.wavecell.com/sms/v1/" + os.Getenv("WAVECELL_SUB_ACC_ID") + "/single"
@@ -43,7 +50,6 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 		history: string(body),
 	}
 	bodyResultHistory, _ := json.Marshal(bodyResult)
-
 	_, err = trs.updateDynamoTransmitt(payload.CallbackData,
 		wavecellResponse.Status.Code,
 		string(bodyResultHistory), payload)

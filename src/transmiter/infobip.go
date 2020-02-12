@@ -31,6 +31,13 @@ func (trs *Transmiter) infobipActionShardOTP(history string, payload *entity.His
 	if err != nil {
 		log.Println("Error: ", err)
 	}
+	if !checkEnvironment() {
+		_, err := trs.updateDynamoTransmitt(payload.CallbackData, "SENDED", " ", payload)
+		if err != nil {
+			log.Println("Wavecell Transmitter Dynamo: ", err)
+		}
+		return
+	}
 	username := os.Getenv("INFOBIP_USERNAME")
 	password := os.Getenv("INFOBIP_PASSWORD")
 	client, err := trs.Requester.CLIENT("POST", os.Getenv("INFOBIP_SEND_SMS_URL"), reformatPayload)

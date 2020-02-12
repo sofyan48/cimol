@@ -82,3 +82,8 @@ func (trs *Transmiter) updateDynamoTransmitt(ID, status, data string, history *e
 
 // TransferToShardReceiver ...
 func (trs *Transmiter) TransferToShardReceiver(historyString string) {}
+
+func checkEnvironment() bool {
+	envi := os.Getenv("APP_ENVIRONMENT")
+	return envi == "development" || envi == "staging"
+}
