@@ -5,6 +5,22 @@ type InfobipRequestPayload struct {
 	Messages []InfobipMessages `json:"messages"`
 }
 
+// // InfobipCallbackRequestPost ...
+// type InfobipCallbackRequestPost struct {
+// 	Messages []struct {
+// 		To     string `json:"to"`
+// 		Status struct {
+// 			GroupID     uint   `json:"groupId"`
+// 			GroupName   string `json:"groupName"`
+// 			ID          uint   `json:"id"`
+// 			Name        string `json:"name"`
+// 			Description string `json:"description"`
+// 		} `json:"status"`
+// 		MessageID    string `json:"messageId"`
+// 		CallbackData string `json:"callbackData"`
+// 	} `json:"messages"`
+// }
+
 // InfobipMessages .../
 type InfobipMessages struct {
 	From             string               `json:"from"`
@@ -20,38 +36,47 @@ type InfobipDestination struct {
 	To string `json:"to"`
 }
 
-// InfobipCallBackRequest ...
-type InfobipCallBackRequest struct {
-	Results []InfobipRequestChild
+// InfobipCallbackRequest ...
+type InfobipCallbackRequest struct {
+	Results []InfobipRequestChild `json:"results"`
 }
 
 // InfobipRequestChild ...
 type InfobipRequestChild struct {
-	BulkID     string
-	MessagesID string
-	To         string
-	SentAt     string
-	DoneAt     string
-	SmsCount   uint
-	MccMnc     string
-	Price      struct {
-		PricePerMessages string
-		Currency         string
-	}
-	Status struct {
-		GroupID     string
-		GroupName   string
-		ID          string
-		Name        string
-		Description string
-	}
-	Error struct {
-		GroupID     string
-		GroupName   string
-		ID          string
-		Name        string
-		Description string
-		Permanent   bool
-	}
-	CallBackData string
+	BulkID       string             `json:"bulkId"`
+	MessagesID   string             `json:"messageId"`
+	To           string             `json:"to"`
+	SentAt       string             `json:"sentAt"`
+	DoneAt       string             `json:"doneAt"`
+	SmsCount     uint               `json:"smsCount"`
+	MccMnc       string             `json:"mccMnc"`
+	Price        PriceChildInfobip  `json:"price"`
+	Status       StatusChildInfobip `json:"status"`
+	Error        ErrorChildInfobip  `json:"error"`
+	CallbackData string             `json:"callbackData"`
+}
+
+// PriceChildInfobip ...
+type PriceChildInfobip struct {
+	PricePerMessages string `json:"pricePerMessages"`
+	Currency         string `json:"currency"`
+}
+
+// StatusChildInfobip ..
+type StatusChildInfobip struct {
+	GroupID     uint   `json:"groupId"`
+	GroupName   string `json:"groupName"`
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+// ErrorChildInfobip ...
+type ErrorChildInfobip struct {
+	GroupID     uint   `json:"groupId"`
+	GroupName   string `json:"groupName"`
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Permanent   bool   `json:"permanent"`
 }

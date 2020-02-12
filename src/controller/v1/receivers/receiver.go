@@ -16,14 +16,13 @@ type ControllerReceiver struct {
 
 // InfobipReceiver ...
 func (ctrl *ControllerReceiver) InfobipReceiver(context *gin.Context) {
-	payload := &entity.InfobipCallBackRequest{}
+	payload := &entity.InfobipCallbackRequest{}
 	err := context.ShouldBind(payload)
 	if err != nil {
 		rest.ResponseMessages(context, http.StatusBadRequest, err.Error())
 		return
 	}
-	id := "afc3651c-ff8e-4d07-83cc-433a2e67d775"
-	ctrl.ServiceReceivers.InfobipReceiver(id, payload)
+	ctrl.ServiceReceivers.InfobipReceiver(payload.Results[0].CallbackData, payload)
 	rest.ResponseData(context, http.StatusOK, payload)
 	return
 }

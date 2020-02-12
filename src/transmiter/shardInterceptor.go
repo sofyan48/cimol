@@ -2,6 +2,7 @@ package transmiter
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 
@@ -26,6 +27,8 @@ func (trs *Transmiter) intercepActionShard(data *entity.DynamoItem) {
 			break
 		}
 	}
-	trs.wavecellActionShard(historyProvider, history)
+	fmt.Println("Provider: ", historyProvider)
+	fmt.Println("History: ", history)
+	// trs.wavecellActionShard(historyProvider, history)
 
 }

@@ -16,7 +16,6 @@ func CreateLog(logging entity.Logging) {
 			log.Fatalf("error opening file: %v", err)
 		}
 		defer f.Close()
-
 		log.SetOutput(f)
 		log.Println("This is a test log entry")
 	} else {
