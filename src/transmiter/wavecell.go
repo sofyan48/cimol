@@ -50,4 +50,5 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 	if err != nil {
 		log.Println("Wavecell Transmitter Dynamo: ", err)
 	}
+	log.Println("SMS SEND: ", string(body))
 }

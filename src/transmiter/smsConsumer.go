@@ -2,6 +2,7 @@ package transmiter
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -60,6 +61,7 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 				if err != nil {
 					log.Println("Error: ", err)
 				}
+				fmt.Println("Data Kinesis", itemDynamo)
 				trs.intercepActionShard(itemDynamo)
 			}
 			close(done)
