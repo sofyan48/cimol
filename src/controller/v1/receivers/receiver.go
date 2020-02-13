@@ -2,6 +2,7 @@ package receivers
 
 import (
 	"net/http"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
@@ -22,8 +23,12 @@ func (ctrl *ControllerReceiver) InfobipReceiver(context *gin.Context) {
 		rest.ResponseMessages(context, http.StatusBadRequest, err.Error())
 		return
 	}
-	ctrl.ServiceReceivers.InfobipReceiver(payload.Results[0].CallbackData, payload)
-	rest.ResponseData(context, http.StatusOK, payload)
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	go ctrl.ServiceReceivers.InfobipReceiver(payload.Results[0].CallbackData, payload)
+
+	rest.ResponseMessages(context, http.StatusOK, "Success")
+
 	return
 }
 

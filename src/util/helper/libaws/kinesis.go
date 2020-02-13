@@ -32,7 +32,7 @@ func (aw *Aws) SendStart(ID string, itemDynamo *entity.DynamoItem, stack string,
 	dataSend.SetData(data)
 	_, err = svc.PutRecord(dataSend)
 	if err != nil {
-		log.Println(err)
+		log.Println("error: ", err)
 	}
 	wg.Done()
 	return

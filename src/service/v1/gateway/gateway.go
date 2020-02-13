@@ -35,11 +35,6 @@ type GatewayInterface interface {
 func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, wg *sync.WaitGroup) {
 	itemDynamo := gateway.Providers.InterceptorMessages(data)
 
-	stateFulData := &entity.StateFullKinesis{}
-	stateFulData.Data = itemDynamo
-	stateFulData.Status = "interceptors"
-	stateFulData.Stack = "onGoing"
-
 	wg.Add(2)
 	go gateway.AwsLib.SendStart(data.UUID, itemDynamo, "interceptors", wg)
 

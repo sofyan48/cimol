@@ -2,10 +2,11 @@ package receivers
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
-	"github.com/sofyan48/rll-daemon-new/src/service/v1/receivers/callbackprovider"
+	"github.com/sofyan48/rll-daemon-new/src/util/callbackprovider"
 	"github.com/sofyan48/rll-daemon-new/src/util/helper/libaws"
 )
 
@@ -25,24 +26,22 @@ func ReceiverHandler() *Receiver {
 
 // ReceiverInterface ...
 type ReceiverInterface interface {
-	InfobipReceiver(ID string, data *entity.InfobipCallbackRequest) (string, error)
+	InfobipReceiver(ID string, data *entity.InfobipCallbackRequest)
 	WavecellReceiver(ID string, data *entity.WavecelllCallBackRequest) (string, error)
 }
 
 // InfobipReceiver ...
-func (rcv *Receiver) InfobipReceiver(ID string, data *entity.InfobipCallbackRequest) (string, error) {
+func (rcv *Receiver) InfobipReceiver(ID string, data *entity.InfobipCallbackRequest) {
 	dynamoItem := &entity.DynamoItemResponse{}
-	fmt.Println(data)
 	dynamoData, err := rcv.AwsLib.GetDynamoData(ID)
 	if err != nil {
-		return "", err
+		log.Println("Error: ", err)
 	}
 	err = dynamodbattribute.UnmarshalMap(dynamoData.Item, &dynamoItem)
 	if err != nil {
-		return "", err
+		log.Println("Error: ", err)
 	}
 	rcv.Callback.InfobipCallback(dynamoItem, data)
-	return "", nil
 }
 
 // WavecellReceiver ...
