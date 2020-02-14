@@ -19,3 +19,19 @@ type PostNotificationRequest struct {
 	UUID    string                          `json:"uuid"`
 	Payload *PayloadPostNotificationRequest `json:"payload"`
 }
+
+// PostNotificationRequestEmail ...
+type PostNotificationRequestEmail struct {
+	Type    string               `json:"type"`
+	UUID    string               `json:"uuid"`
+	Payload *PayloadRequestEmail `json:"payload"`
+}
+
+// PayloadRequestEmail ...
+type PayloadRequestEmail struct {
+	To         string             `json:"to"`
+	From       string             `json:"from"`
+	Subject    string             `json:"subject"`
+	TemplateID string             `json:"template_id"`
+	Data       map[string]*string `json:"data"`
+}
