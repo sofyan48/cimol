@@ -3,7 +3,7 @@ SMS OTP AND Email Notification Service
 
 ## Getting Started
 This support For go version 1.13 
-
+Service using Aws Kinesis to queue and data streaming system and dynamo to logging
 ### Local Development
 
 Fork this repo for your repo then clone in your local
