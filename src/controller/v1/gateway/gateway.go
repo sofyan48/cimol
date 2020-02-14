@@ -37,6 +37,23 @@ func (ctrl *ControllerGateway) PostNotification(context *gin.Context) {
 	return
 }
 
+// PostNotificationEmail ...
+func (ctrl *ControllerGateway) PostNotificationEmail(context *gin.Context) {
+	// catatan manis untuk infobip jangan lupa untuk mengirim id dari log dynamo ke callback data
+
+	payload := &entity.PostNotificationRequestEmail{}
+	err := context.ShouldBind(payload)
+	if err != nil {
+		rest.ResponseMessages(context, http.StatusBadRequest, err.Error())
+		return
+	}
+	result := &entity.PostNotificationResponse{}
+	result.ID = payload.UUID
+	result.Status = "QUEUE"
+	rest.ResponseData(context, http.StatusOK, payload)
+	return
+}
+
 // GetHistory ...
 func (ctrl *ControllerGateway) GetHistory(context *gin.Context) {
 	history, err := ctrl.ServiceGateway.GetHistory(context.Param("receiverAddress"))
