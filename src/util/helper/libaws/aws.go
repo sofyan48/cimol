@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/kinesis"
-	dynamoEntyty "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
+	dynamoEntyty "github.com/sofyan48/otp/src/entity/http/v1"
 )
 
 // Aws ...

@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
+	entity "github.com/sofyan48/otp/src/entity/http/v1"
 )
 
 func (trs *Transmiter) infobipActionShardOTP(history string, payload *entity.HistoryItem) {

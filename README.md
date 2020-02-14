@@ -1,4 +1,5 @@
-# BOILERPLATE
+# OTP
+SMS OTP AND Email Notification Service
 
 ## Getting Started
 This support For go version 1.13 

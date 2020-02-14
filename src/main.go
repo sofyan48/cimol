@@ -7,11 +7,11 @@ import (
 	"os"
 	"sync"
 
-	"github.com/sofyan48/rll-daemon-new/src/config"
-	"github.com/sofyan48/rll-daemon-new/src/transmiter"
+	"github.com/sofyan48/otp/src/config"
+	"github.com/sofyan48/otp/src/transmiter"
 
 	"github.com/joho/godotenv"
-	"github.com/sofyan48/rll-daemon-new/src/routes"
+	"github.com/sofyan48/otp/src/routes"
 )
 
 // ConfigEnvironment |

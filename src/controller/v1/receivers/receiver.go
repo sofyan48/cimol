@@ -5,9 +5,9 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
-	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
-	service "github.com/sofyan48/rll-daemon-new/src/service/v1/receivers"
-	"github.com/sofyan48/rll-daemon-new/src/util/helper/rest"
+	entity "github.com/sofyan48/otp/src/entity/http/v1"
+	service "github.com/sofyan48/otp/src/service/v1/receivers"
+	"github.com/sofyan48/otp/src/util/helper/rest"
 )
 
 // ControllerReceiver ...

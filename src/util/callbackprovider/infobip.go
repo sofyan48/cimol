@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
+	entity "github.com/sofyan48/otp/src/entity/http/v1"
 )
 
 // InfobipCallback ...

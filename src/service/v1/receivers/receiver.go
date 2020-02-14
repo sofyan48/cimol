@@ -6,9 +6,9 @@ import (
 	"log"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	entity "github.com/sofyan48/rll-daemon-new/src/entity/http/v1"
-	"github.com/sofyan48/rll-daemon-new/src/util/callbackprovider"
-	"github.com/sofyan48/rll-daemon-new/src/util/helper/libaws"
+	entity "github.com/sofyan48/otp/src/entity/http/v1"
+	"github.com/sofyan48/otp/src/util/callbackprovider"
+	"github.com/sofyan48/otp/src/util/helper/libaws"
 )
 
 // Receiver ...
