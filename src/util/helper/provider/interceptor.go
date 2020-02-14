@@ -2,6 +2,7 @@ package provider
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 
@@ -46,7 +47,7 @@ func (prv *Providers) InterceptorMessages(data *entity.PostNotificationRequest) 
 		}
 		itemDynamo.History = history
 	}
-
+	fmt.Println("HISTORY : ", historyValue.Provider)
 	return itemDynamo
 
 }

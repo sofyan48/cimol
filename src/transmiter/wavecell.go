@@ -2,6 +2,7 @@ package transmiter
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 )
 
 func (trs *Transmiter) wavecellActionShard(history string, payload *entity.HistoryItem) {
+
 	reformatPayload := &entity.WavecellRequest{}
 	reformatPayload.Destination = payload.Payload.Msisdn
 	reformatPayload.Source = os.Getenv("WAVECELL_ACC_ID")
@@ -44,11 +46,13 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 	if err != nil {
 		log.Println("Wavecell Transmitter: ", err)
 	}
+	fmt.Println(string(body))
 	wavecellResponse := &entity.WavecellResponse{}
 	json.Unmarshal(body, wavecellResponse)
 	bodyResult := map[string]string{
 		history: string(body),
 	}
+
 	bodyResultHistory, _ := json.Marshal(bodyResult)
 	_, err = trs.updateDynamoTransmitt(payload.CallbackData,
 		wavecellResponse.Status.Code,

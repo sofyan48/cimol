@@ -1,6 +1,7 @@
 package receivers
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -41,7 +42,13 @@ func (rcv *Receiver) InfobipReceiver(ID string, data *entity.InfobipCallbackRequ
 	if err != nil {
 		log.Println("Error: ", err)
 	}
-	rcv.Callback.InfobipCallback(dynamoItem, data)
+	historyItems := &entity.HistoryItem{}
+	err = json.Unmarshal([]byte(dynamoItem.History[1]), historyItems)
+	if err != nil {
+		log.Println("Error: ", err)
+	}
+
+	rcv.Callback.InfobipCallback(dynamoItem, data, historyItems)
 }
 
 // WavecellReceiver ...

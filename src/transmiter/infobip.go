@@ -12,10 +12,10 @@ import (
 )
 
 func (trs *Transmiter) infobipActionShardOTP(history string, payload *entity.HistoryItem) {
+	fmt.Println("HISTORY TRANSMITTER: ", payload.Provider)
 	dest := entity.InfobipDestination{}
 	dest.To = payload.Payload.Msisdn
 	destination := []entity.InfobipDestination{dest}
-
 	infobipMessages := entity.InfobipMessages{}
 	infobipMessages.Destinations = destination
 	infobipMessages.From = os.Getenv("INFOBIP_SENDER_ID")
@@ -34,7 +34,7 @@ func (trs *Transmiter) infobipActionShardOTP(history string, payload *entity.His
 	if !checkEnvironment() {
 		_, err := trs.updateDynamoTransmitt(payload.CallbackData, "SENDED", " ", payload)
 		if err != nil {
-			log.Println("Wavecell Transmitter Dynamo: ", err)
+			log.Println("Infobip Transmitter Dynamo: ", err)
 		}
 		return
 	}
@@ -51,9 +51,8 @@ func (trs *Transmiter) infobipActionShardOTP(history string, payload *entity.His
 	if err != nil {
 		log.Println("Infobip Transmitter: ", err)
 	}
-	fmt.Println(response.Status)
-	fmt.Println(response.StatusCode)
 	body, err := ioutil.ReadAll(response.Body)
 	s := string(body)
+	trs.updateDynamoTransmitt(payload.CallbackData, "SENDED", s, payload)
 	fmt.Println(s)
 }

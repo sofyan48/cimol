@@ -2,7 +2,6 @@ package transmiter
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 
@@ -24,11 +23,14 @@ func (trs *Transmiter) intercepActionShard(data *entity.DynamoItem) {
 			history.Payload = data.History[i.Provider].Payload
 			history.Response = data.History[i.Provider].Response
 			historyProvider = data.History[i.Provider].Provider
+			history.Provider = data.History[i.Provider].Provider
 			break
 		}
 	}
-	fmt.Println("Provider: ", historyProvider)
-	fmt.Println("History: ", history)
 	// trs.wavecellActionShard(historyProvider, history)
-
+	if historyProvider == "infobip" {
+		trs.infobipActionShardOTP(historyProvider, history)
+	} else {
+		trs.wavecellActionShard(historyProvider, history)
+	}
 }
