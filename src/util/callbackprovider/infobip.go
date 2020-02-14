@@ -41,7 +41,6 @@ func (callback *ProviderCallback) InfobipCallback(dynamo *entity.DynamoItemRespo
 		itemDynamo.ReceiverAddress = dynamo.ReceiverAddress
 		itemDynamo.StatusText = "RELOADING"
 		itemDynamo.Type = dynamo.Type
-		fmt.Println(itemDynamo)
 		wg := &sync.WaitGroup{}
 		wg.Add(1)
 		go callback.AwsLib.InputDynamo(itemDynamo, wg)
@@ -63,7 +62,6 @@ func validateStatusInfobip(status string) bool {
 	for _, i := range statusData {
 		if strings.EqualFold(i, status) {
 			return true
-			break
 		}
 	}
 	return false

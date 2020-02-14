@@ -27,10 +27,15 @@ func (trs *Transmiter) intercepActionShard(data *entity.DynamoItem) {
 			break
 		}
 	}
-	// trs.wavecellActionShard(historyProvider, history)
-	if historyProvider == "infobip" {
+	switch historyProvider {
+	case "infobip":
 		trs.infobipActionShardOTP(historyProvider, history)
-	} else {
+	case "wavecell":
 		trs.wavecellActionShard(historyProvider, history)
+	case "gosms":
+		log.Println("INCOMING")
+	default:
+		trs.infobipActionShardOTP(historyProvider, history)
 	}
+
 }

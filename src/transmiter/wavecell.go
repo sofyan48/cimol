@@ -12,7 +12,6 @@ import (
 )
 
 func (trs *Transmiter) wavecellActionShard(history string, payload *entity.HistoryItem) {
-
 	reformatPayload := &entity.WavecellRequest{}
 	reformatPayload.Destination = payload.Payload.Msisdn
 	reformatPayload.Source = os.Getenv("WAVECELL_ACC_ID")
@@ -26,6 +25,7 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 		return
 	}
 	wavecelSendURL := "https://api.wavecell.com/sms/v1/" + os.Getenv("WAVECELL_SUB_ACC_ID_GENERAL") + "/single"
+	fmt.Println("WAVECELL OTP: ", payload.Payload.OTP)
 	if payload.Payload.OTP == true {
 		wavecelSendURL = "https://api.wavecell.com/sms/v1/" + os.Getenv("WAVECELL_SUB_ACC_ID") + "/single"
 	}
