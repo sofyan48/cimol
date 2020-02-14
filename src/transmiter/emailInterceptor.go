@@ -2,15 +2,16 @@ package transmiter
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 
 	entity "github.com/sofyan48/otp/src/entity/http/v1"
 )
 
-func (trs *Transmiter) intercepActionShard(data *entity.DynamoItem) {
+func (trs *Transmiter) intercepActionShardEmail(data *entity.DynamoItem) {
 	dataThirdParty := make([]entity.DataProvider, 0)
-	err := json.Unmarshal([]byte(os.Getenv("SMS_ORDER_CONF")), &dataThirdParty)
+	err := json.Unmarshal([]byte(os.Getenv("EMAIL_ORDER_CONF")), &dataThirdParty)
 	if err != nil {
 		log.Println(err)
 	}
@@ -28,14 +29,10 @@ func (trs *Transmiter) intercepActionShard(data *entity.DynamoItem) {
 		}
 	}
 	switch historyProvider {
-	case "infobip":
-		trs.infobipActionShardOTP(historyProvider, history)
-	case "wavecell":
-		trs.wavecellActionShard(historyProvider, history)
-	case "gosms":
-		log.Println("INCOMING")
+	case "sendgrid":
+		fmt.Println("Coming Soon")
 	default:
-		trs.infobipActionShardOTP(historyProvider, history)
+		fmt.Println("Coming Soon")
 	}
 
 }

@@ -60,7 +60,13 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 				if err != nil {
 					log.Println("Error: ", err)
 				}
-				trs.intercepActionShard(itemDynamo)
+				switch itemDynamo.Type {
+				case "sms":
+					trs.intercepActionShardSMS(itemDynamo)
+				case "email":
+					trs.intercepActionShardEmail(itemDynamo)
+				}
+
 			}
 			close(done)
 			shardIterator = *data.NextShardIterator
