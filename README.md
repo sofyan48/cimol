@@ -23,15 +23,54 @@ cp .env.example .env
 ```
 Setting up your local configuration see example
 ```
+####################################################################
+# SERVER CONFIGURATION
+####################################################################
 SERVER_ADDRESS=0.0.0.0
 SERVER_PORT=3000
 SERVER_TIMEZONE=Asia/Jakarta
+SECRET_KEY=
+APP_ENVIRONMENT=development
+APP_LOG=production
 
-DB_MYSQL_USERNAME=root
-DB_MYSQL_PASSWORD=password
-DB_MYSQL_HOST=localhost
-DB_MYSQL_PORT=3306
-DB_MYSQL_DATABASE=db
+####################################################################
+# SWAGGER CONFIGURATION
+####################################################################
+SWAGGER_SERVER_ADDRESS=http://localhost:3000
+
+####################################################################
+# AWS CONFIGURATION
+####################################################################
+AWS_ACCESS_KEY=
+AWS_ACCESS_SECRET=
+AWS_DYNAMO_TABLE=
+
+
+KINESIS_STREAM_NAME=
+KINESIS_SHARD_ID=
+KINESIS_SHARD_TYPE=LATEST
+
+####################################################################
+# SMS PROVIDER CONFIGURATION
+####################################################################
+
+SMS_ORDER_CONF=[{"provider":"infobip"},{"provider":"wavecell"},{"provider":"twilio"},{"provider":"gosms"}]
+
+INFOBIP_USERNAME=
+INFOBIP_PASSWORD=
+INFOBIP_SEND_SMS_URL=
+INFOBIP_SENDER_ID=
+INFOBIP_CALLBACK=
+INFOBIP_SHARD_ID=
+INFOBIP_SHARD_TYPE=LATEST
+
+WAVECELL_ACC_ID=
+WAVECELL_SUB_ACC_ID=
+WAVECELL_ACC_TOKEN=
+WAVECELL_SUB_ACC_ID_GENERAL=
+WAVECELL_CALLBACK_URL=
+WAVECELL_SHARD_ID=
+WAVECELL_SHARD_TYPE=LATEST
 ```
 
 After environment setting then run your server
@@ -97,67 +136,6 @@ Remove your container
 docker-compose rm -f
 ```
 
-## Tree
-
-```
-.
-├── Dockerfile
-├── Gopkg.toml
-├── Makefile
-├── README.md
-├── docker-compose.yml
-├── docs
-│   ├── postman
-│   └── swagger
-│       └── docs
-│           ├── docs.go
-│           ├── swagger.json
-│           └── swagger.yaml
-├── go.mod
-├── go.sum
-├── src
-│   ├── config
-│   │   └── server_configuration.go
-│   ├── controller
-│   │   └── v1
-│   │       ├── health
-│   │       └── routes.go
-│   ├── entity
-│   │   ├── api
-│   │   ├── db
-│   │   │   └── v1
-│   │   └── http
-│   │       └── v1
-│   ├── main.go
-│   ├── migration
-│   │   └── mysql
-│   │       ├── 20191029093439_users.down.sql
-│   │       └── 20191029093439_users.up.sql
-│   ├── repository
-│   │   └── db
-│   │       └── v1
-│   ├── routes
-│   │   ├── route.go
-│   │   └── router_test.go
-│   ├── service
-│   │   └── v1
-│   │       └── health
-│   └── util
-│       ├── helper
-│       │   ├── crypto
-│       │   ├── mysqlconnection
-│       │   ├── redis
-│       │   ├── rest
-│       │   └── str_process
-│       └── middleware
-│           ├── auth.go
-│           ├── cors_middleware.go
-│           └── middleware.go
-├── tmp
-│   ├── air_errors.log
-│   └── main
-└── watcher.conf
-```
 
 ## How To Use
 See the list below for instructions on how to use this boilerplate:
@@ -174,27 +152,6 @@ Plugins and utils are in the ***util*** folder all third-party packages that hel
 
 ![golang clean architecture](https://github.com/sofyan48/BOILERGOLANG/blob/master/docs/diagram.png)
 
-## Database Migration
-### Golang Migrate
-Documentation Mode 
-[Release Downloads](https://github.com/golang-migrate/migrate/blob/master/cmd/migrate/README.md)
-
-#### Installing
-##### MAC
-```
-brew install golang-migrate
-```
-
-##### Linux And Windows
-```
-curl -L https://github.com/golang-migrate/migrate/releases/download/$version/migrate.$platform-amd64.tar.gz | tar xvz
-```
-### Migrating Database
-
-```
-migrate -path path_migration/ -database 'mysql://root:root@tcp(localhost:3306)/bigevent' up
-```
-in this boilerplate migration path : src/migration/mysql
 
 ## Documentation Format
 ### Setup Swagger Docs
