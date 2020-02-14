@@ -2,7 +2,6 @@ package transmiter
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -33,7 +32,6 @@ func GetTransmiter() *Transmiter {
 
 // ConsumerTrans ...
 func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
-	fmt.Println("TRANSMITTER EXEC")
 	shardIterator, err := trs.AwsLibs.GetShardIterator()
 	if err != nil {
 		log.Println(err)

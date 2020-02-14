@@ -46,7 +46,6 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 	if err != nil {
 		log.Println("Wavecell Transmitter: ", err)
 	}
-	fmt.Println(string(body))
 	wavecellResponse := &entity.WavecellResponse{}
 	json.Unmarshal(body, wavecellResponse)
 	bodyResult := map[string]string{

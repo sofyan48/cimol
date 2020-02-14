@@ -2,7 +2,6 @@ package receivers
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
@@ -53,12 +52,12 @@ func (rcv *Receiver) InfobipReceiver(ID string, data *entity.InfobipCallbackRequ
 
 // WavecellReceiver ...
 func (rcv *Receiver) WavecellReceiver(ID string, data *entity.WavecelllCallBackRequest) (string, error) {
-	fmt.Println(data)
+
 	return "", nil
 }
 
 // GoSMSReceiver ...
 func (rcv *Receiver) GoSMSReceiver(ID string, data *entity.WavecelllCallBackRequest) (string, error) {
-	fmt.Println(data)
+
 	return "", nil
 }

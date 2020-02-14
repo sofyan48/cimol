@@ -2,7 +2,6 @@ package transmiter
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -12,7 +11,6 @@ import (
 )
 
 func (trs *Transmiter) infobipActionShardOTP(history string, payload *entity.HistoryItem) {
-	fmt.Println("HISTORY TRANSMITTER: ", payload.Provider)
 	dest := entity.InfobipDestination{}
 	dest.To = payload.Payload.Msisdn
 	destination := []entity.InfobipDestination{dest}
@@ -52,7 +50,7 @@ func (trs *Transmiter) infobipActionShardOTP(history string, payload *entity.His
 		log.Println("Infobip Transmitter: ", err)
 	}
 	body, err := ioutil.ReadAll(response.Body)
-	s := string(body)
-	trs.updateDynamoTransmitt(payload.CallbackData, "SENDED", s, payload)
-	fmt.Println(s)
+	resultsData := string(body)
+	trs.updateDynamoTransmitt(payload.CallbackData, "SENDED", resultsData, payload)
+	log.Println("TRANSMITTER: ", resultsData)
 }

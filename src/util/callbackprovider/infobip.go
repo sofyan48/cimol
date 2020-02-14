@@ -48,7 +48,7 @@ func (callback *ProviderCallback) InfobipCallback(dynamo *entity.DynamoItemRespo
 		go callback.AwsLib.SendStart(itemDynamo.ID, itemDynamo, "interceptors", wg)
 
 	} else {
-		fmt.Println("UPDATE DATA")
+		fmt.Println("COMING SOON")
 	}
 }
 
