@@ -2,6 +2,7 @@ package libsendgrid
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -62,5 +63,21 @@ func (libsengrid *Libsendgrid) SendEmail(history *entity.EmailHistoryItem) {
 		}
 		return
 	}
-
+	payloads := &entity.SendPayload{}
+	perzonalitations := []entity.PersonalizationData{}
+	fromPayloads := []entity.SenderFrom{}
+	fromPayloads[0].Email = history.Payload.From
+	payloads.From = fromPayloads
+	toPayloads := []entity.SenderTo{}
+	toPayloads[0].Email = history.Payload.To
+	perzonalitations[0].To = toPayloads
+	perzonalitations[0].Subject = history.Payload.Subject
+	perzonalitations[0].Substitutions = history.Payload.Data
+	payloads.Personalization = perzonalitations
+	payloads.TemplateID = history.Payload.TemplateID
+	payloadMarshal, err := json.Marshal(payloads)
+	if err != nil {
+		log.Println("Error Sending Email: ", err)
+	}
+	fmt.Println(string(payloadMarshal))
 }

@@ -5,11 +5,8 @@ go 1.13
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/aws/aws-sdk-go v1.26.3
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/garyburd/redigo v1.6.0
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-sql-driver/mysql v1.4.1
-	github.com/jinzhu/gorm v1.9.11
 	github.com/joho/godotenv v1.3.0
 	github.com/sofyan48/rll-daemon-new v0.0.0-20200214194258-5430d50b3686
 	github.com/stretchr/testify v1.4.0

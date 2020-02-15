@@ -24,3 +24,33 @@ type TemplateResponse struct {
 	UpdateAt   string             `json:"updated_at"`
 	Versions   []VersionTemplates `json:"versions"`
 }
+
+// SendPayload ...
+type SendPayload struct {
+	Personalization []PersonalizationData
+	From            []SenderFrom `json:"from"`
+	TemplateID      string       `json:"template_id"`
+}
+
+// SenderTo ..
+type SenderTo struct {
+	Email string `json:"email"`
+}
+
+// SenderFrom ...
+type SenderFrom struct {
+	Email string `json:"email"`
+}
+
+// PersonalizationData ...
+type PersonalizationData struct {
+	Subject       string            `json:"subject"`
+	To            []SenderTo        `json:"to"`
+	Substitutions map[string]string `json:"substitutions"`
+}
+
+// ContentData ...
+type ContentData struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
+}
