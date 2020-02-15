@@ -5,6 +5,11 @@ Cimol using AWS Kinesis data streaming system and dynamo to logging all history 
 ## Getting Started
 This support For go version 1.13 
 
+### Documentation
+
+![cimol](https://github.com/sofyan48/BOILERGOLANG/blob/master/docs/diagram.png)
+
+
 ### Local Development
 
 Fork this repo for your repo then clone in your local
@@ -170,11 +175,6 @@ See the list below for instructions on how to use this boilerplate:
 5. ***Routing*** Routing is a mapping of the paths of the REST API that you have designed, routing is available on each controller version layering, this routing will be called on the router that has been created
 
 Plugins and utils are in the ***util*** folder all third-party packages that help you should be stored in this folder, you can choose whether the package is a middleware of your REST API or as a pure supporting utility
-
-### Diagram
-
-![golang clean architecture](https://github.com/sofyan48/BOILERGOLANG/blob/master/docs/diagram.png)
-
 
 ## Documentation Format
 ### Setup Swagger Docs
