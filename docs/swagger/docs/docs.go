@@ -27,7 +27,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/history/+6281390232808": {
+        "/history/+6281247930699": {
           "get": {
             "description": "",
             "summary": "HISTORY",
