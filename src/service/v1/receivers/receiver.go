@@ -56,8 +56,8 @@ func (rcv *Receiver) WavecellReceiver(ID string, data *entity.WavecelllCallBackR
 	return "", nil
 }
 
-// GoSMSReceiver ...
-func (rcv *Receiver) GoSMSReceiver(ID string, data *entity.WavecelllCallBackRequest) (string, error) {
+// TwilioReceiver ...
+func (rcv *Receiver) TwilioReceiver(ID string, data *entity.WavecelllCallBackRequest) (string, error) {
 
 	return "", nil
 }
