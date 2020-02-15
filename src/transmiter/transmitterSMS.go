@@ -55,13 +55,19 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 			if err != nil {
 				log.Println(err)
 			}
-			itemDynamo := &entity.DynamoItem{}
+			selectionType := &entity.DataReceiveSelection{}
 			for _, i := range data.Records {
-				err := json.Unmarshal([]byte(string(i.Data)), itemDynamo)
-				if err != nil {
-					log.Println("Error: ", err)
+				json.Unmarshal([]byte(string(i.Data)), selectionType)
+				switch selectionType.Type {
+				case "sms":
+					itemSMS := &entity.DynamoItem{}
+					json.Unmarshal([]byte(string(i.Data)), itemSMS)
+					trs.intercepActionShardSMS(itemSMS)
+				case "email":
+					itemEmail := &entity.DynamoItemEmail{}
+					json.Unmarshal([]byte(string(i.Data)), itemEmail)
+					trs.intercepActionShardEmail(itemEmail)
 				}
-				trs.intercepActionShardSMS(itemDynamo)
 
 			}
 			shardIterator = *data.NextShardIterator

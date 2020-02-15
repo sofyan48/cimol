@@ -9,7 +9,7 @@ import (
 	entity "github.com/sofyan48/otp/src/entity/http/v1"
 )
 
-func (trs *TransmiterEmail) intercepActionShardEmail(data *entity.DynamoItemEmail) {
+func (trs *Transmiter) intercepActionShardEmail(data *entity.DynamoItemEmail) {
 	dataThirdParty := make([]entity.DataProvider, 0)
 	err := json.Unmarshal([]byte(os.Getenv("EMAIL_ORDER_CONF")), &dataThirdParty)
 	if err != nil {

@@ -33,13 +33,9 @@ func main() {
 	flag.Parse()
 	ConfigEnvironment(*environment)
 	wg := &sync.WaitGroup{}
-	// sms := transmiter.GetTransmiter()
-	// wg.Add(1)
-	// go sms.ConsumerTrans(wg)
-
-	email := transmiter.GetTransmiterEmail()
-	wg.Add(3)
-	go email.ConsumerTransEmail(wg)
+	transmiters := transmiter.GetTransmiter()
+	wg.Add(1)
+	go transmiters.ConsumerTrans(wg)
 
 	startApp()
 }
