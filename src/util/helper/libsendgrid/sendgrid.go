@@ -6,9 +6,9 @@ import (
 	"os"
 	"strings"
 
-	entity "github.com/sofyan48/otp/src/entity/http/v1"
-	"github.com/sofyan48/otp/src/util/helper/mailtrap"
-	"github.com/sofyan48/otp/src/util/helper/request"
+	entity "github.com/sofyan48/cimol/src/entity/http/v1"
+	"github.com/sofyan48/cimol/src/util/helper/mailtrap"
+	"github.com/sofyan48/cimol/src/util/helper/request"
 )
 
 // Libsendgrid ...

@@ -9,11 +9,11 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/service/kinesis"
-	entity "github.com/sofyan48/otp/src/entity/http/v1"
-	"github.com/sofyan48/otp/src/util/helper/libaws"
-	"github.com/sofyan48/otp/src/util/helper/libsendgrid"
-	"github.com/sofyan48/otp/src/util/helper/provider"
-	"github.com/sofyan48/otp/src/util/helper/request"
+	entity "github.com/sofyan48/cimol/src/entity/http/v1"
+	"github.com/sofyan48/cimol/src/util/helper/libaws"
+	"github.com/sofyan48/cimol/src/util/helper/libsendgrid"
+	"github.com/sofyan48/cimol/src/util/helper/provider"
+	"github.com/sofyan48/cimol/src/util/helper/request"
 )
 
 // Transmiter ...

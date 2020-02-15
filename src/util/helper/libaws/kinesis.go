@@ -8,7 +8,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kinesis"
-	entity "github.com/sofyan48/otp/src/entity/http/v1"
+	entity "github.com/sofyan48/cimol/src/entity/http/v1"
 )
 
 // GetKinesis get dynamodb service

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	entity "github.com/sofyan48/otp/src/entity/http/v1"
+	entity "github.com/sofyan48/cimol/src/entity/http/v1"
 )
 
 func (trs *Transmiter) intercepActionShardSMS(data *entity.DynamoItem) {

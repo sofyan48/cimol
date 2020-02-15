@@ -4,10 +4,10 @@ import (
 	"sync"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	entity "github.com/sofyan48/otp/src/entity/http/v1"
-	"github.com/sofyan48/otp/src/util/helper/libaws"
-	"github.com/sofyan48/otp/src/util/helper/libsendgrid"
-	"github.com/sofyan48/otp/src/util/helper/provider"
+	entity "github.com/sofyan48/cimol/src/entity/http/v1"
+	"github.com/sofyan48/cimol/src/util/helper/libaws"
+	"github.com/sofyan48/cimol/src/util/helper/libsendgrid"
+	"github.com/sofyan48/cimol/src/util/helper/provider"
 )
 
 // Gateway ...

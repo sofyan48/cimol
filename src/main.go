@@ -7,11 +7,11 @@ import (
 	"os"
 	"sync"
 
-	"github.com/sofyan48/otp/src/config"
-	"github.com/sofyan48/otp/src/transmiter"
+	"github.com/sofyan48/cimol/src/config"
+	"github.com/sofyan48/cimol/src/transmiter"
 
 	"github.com/joho/godotenv"
-	"github.com/sofyan48/otp/src/routes"
+	"github.com/sofyan48/cimol/src/routes"
 )
 
 // ConfigEnvironment |

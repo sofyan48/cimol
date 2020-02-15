@@ -3,12 +3,12 @@ package users
 import (
 	"github.com/gin-gonic/gin"
 
-	ctrlNotif "github.com/sofyan48/otp/src/controller/v1/gateway"
-	svcNotif "github.com/sofyan48/otp/src/service/v1/gateway"
+	ctrlNotif "github.com/sofyan48/cimol/src/controller/v1/gateway"
+	svcNotif "github.com/sofyan48/cimol/src/service/v1/gateway"
 
-	ctrlRcv "github.com/sofyan48/otp/src/controller/v1/receivers"
-	svcRcv "github.com/sofyan48/otp/src/service/v1/receivers"
-	"github.com/sofyan48/otp/src/util/middleware"
+	ctrlRcv "github.com/sofyan48/cimol/src/controller/v1/receivers"
+	svcRcv "github.com/sofyan48/cimol/src/service/v1/receivers"
+	"github.com/sofyan48/cimol/src/util/middleware"
 )
 
 // V1RouterLoader types

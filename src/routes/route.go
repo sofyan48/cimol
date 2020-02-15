@@ -8,8 +8,8 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "github.com/sofyan48/otp/docs/swagger/docs"
-	v1 "github.com/sofyan48/otp/src/controller/v1"
+	_ "github.com/sofyan48/cimol/docs/swagger/docs"
+	v1 "github.com/sofyan48/cimol/src/controller/v1"
 )
 
 // LoadRouter params

@@ -5,9 +5,9 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
-	entity "github.com/sofyan48/otp/src/entity/http/v1"
-	service "github.com/sofyan48/otp/src/service/v1/gateway"
-	"github.com/sofyan48/otp/src/util/helper/rest"
+	entity "github.com/sofyan48/cimol/src/entity/http/v1"
+	service "github.com/sofyan48/cimol/src/service/v1/gateway"
+	"github.com/sofyan48/cimol/src/util/helper/rest"
 )
 
 // ControllerGateway ...
