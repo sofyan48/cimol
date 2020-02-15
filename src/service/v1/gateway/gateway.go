@@ -30,8 +30,8 @@ func GatewayHandler() *Gateway {
 type GatewayInterface interface {
 	PostNotification(data *entity.PostNotificationRequest, wg *sync.WaitGroup)
 	PostNotificationEmail(data *entity.PostNotificationRequestEmail, wg *sync.WaitGroup)
-	GetHistory(msisdn string) ([]entity.DynamoItemResponse, error)
-	GetByID(ID string) (*entity.DynamoItemResponse, error)
+	GetHistory(msisdn string) ([]entity.DynamoItemHistory, error)
+	GetByID(ID string) (*entity.DynamoItemHistory, error)
 }
 
 // PostNotification ...
@@ -55,17 +55,17 @@ func (gateway *Gateway) PostNotificationEmail(data *entity.PostNotificationReque
 }
 
 // GetHistory ...
-func (gateway *Gateway) GetHistory(msisdn string) ([]entity.DynamoItemResponse, error) {
+func (gateway *Gateway) GetHistory(msisdn string) ([]entity.DynamoItemHistory, error) {
 	data, err := gateway.AwsLib.GetDynamoHistory(msisdn)
-	dynamoItem := []entity.DynamoItemResponse{}
+	dynamoItem := []entity.DynamoItemHistory{}
 	err = dynamodbattribute.UnmarshalListOfMaps(data.Items, &dynamoItem)
 	return dynamoItem, err
 }
 
 // GetByID ...
-func (gateway *Gateway) GetByID(ID string) (*entity.DynamoItemResponse, error) {
+func (gateway *Gateway) GetByID(ID string) (*entity.DynamoItemHistory, error) {
 	data, err := gateway.AwsLib.GetDynamoData(ID)
-	dynamoItem := &entity.DynamoItemResponse{}
+	dynamoItem := &entity.DynamoItemHistory{}
 	err = dynamodbattribute.UnmarshalMap(data.Item, &dynamoItem)
 	if err != nil {
 		return nil, err

@@ -22,13 +22,22 @@ type DynamoItemEmail struct {
 
 // DynamoItemResponse ..
 type DynamoItemResponse struct {
-	ID   string `json:"id"`
-	Data string `json:"data"`
-	// History         interface{} `json:"history"`
+	ID              string   `json:"id"`
+	Data            string   `json:"data"`
 	History         []string `json:"history"`
 	ReceiverAddress string   `json:"receiverAddress"`
 	StatusText      string   `json:"statusText"`
 	Type            string   `json:"type"`
+}
+
+// DynamoItemHistory ..
+type DynamoItemHistory struct {
+	ID              string      `json:"id"`
+	Data            string      `json:"data"`
+	History         interface{} `json:"history"`
+	ReceiverAddress string      `json:"receiverAddress"`
+	StatusText      string      `json:"statusText"`
+	Type            string      `json:"type"`
 }
 
 // HistoryItem ...
