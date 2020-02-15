@@ -50,6 +50,40 @@ func (prv *Providers) InterceptorMessages(data *entity.PostNotificationRequest) 
 
 }
 
+// InterceptorEmail ...
+func (prv *Providers) InterceptorEmail(data *entity.PostNotificationRequestEmail) *entity.DynamoItemEmail {
+	itemDynamo := &entity.DynamoItemEmail{}
+	marshalData, err := json.Marshal(data.Payload.Data)
+	itemDynamo.Data = string(marshalData)
+	itemDynamo.ReceiverAddress = data.Payload.To
+
+	itemDynamo.StatusText = "QUEUE"
+	itemDynamo.ID = data.UUID
+	itemDynamo.Type = data.Type
+
+	dataThirdParty := make([]entity.DataProvider, 0)
+	err = json.Unmarshal([]byte(os.Getenv("EMAIL_ORDER_CONF")), &dataThirdParty)
+	if err != nil {
+		log.Println(err)
+	}
+
+	historyPayload := &entity.PayloadRequestEmail{}
+	historyPayload.Data = data.Payload.Data
+	historyPayload.To = data.Payload.To
+	historyPayload.From = data.Payload.From
+
+	historyValue := &entity.EmailHistoryItem{}
+	historyValue.Payload = historyPayload
+	historyValue.Response = "interceptors"
+	historyValue.Provider = dataThirdParty[0].Provider
+	history := map[string]*entity.EmailHistoryItem{
+		dataThirdParty[0].Provider: historyValue,
+	}
+	itemDynamo.History = history
+	return itemDynamo
+
+}
+
 // InfobipSender ..
 func (prv *Providers) InfobipSender() {
 

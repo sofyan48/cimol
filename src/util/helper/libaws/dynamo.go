@@ -43,6 +43,27 @@ func (aw *Aws) InputDynamo(itemDynamo *dynamoEntyty.DynamoItem, wg *sync.WaitGro
 	return result, nil
 }
 
+// InputDynamoEmail ...
+func (aw *Aws) InputDynamoEmail(itemDynamo *dynamoEntyty.DynamoItemEmail, wg *sync.WaitGroup) (*dynamodb.PutItemOutput, error) {
+	dynamoLibs := aw.GetDynamoDB()
+	result := &dynamodb.PutItemOutput{}
+	mItem, err := dynamodbattribute.MarshalMap(itemDynamo)
+	if err != nil {
+		log.Println("ERROR: ", err)
+		return result, err
+	}
+	inputDynamo := &dynamodb.PutItemInput{
+		Item:      mItem,
+		TableName: aws.String(os.Getenv("AWS_DYNAMO_TABLE")),
+	}
+	result, err = dynamoLibs.PutItem(inputDynamo)
+	if err != nil {
+		return result, err
+	}
+	wg.Done()
+	return result, nil
+}
+
 // UpdateDynamo ...
 func (aw *Aws) UpdateDynamo(ID, status, data string, history *dynamoEntyty.HistoryItem) (*dynamodb.UpdateItemOutput, error) {
 	dynamoLibs := aw.GetDynamoDB()

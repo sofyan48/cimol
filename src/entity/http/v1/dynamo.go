@@ -10,6 +10,16 @@ type DynamoItem struct {
 	Type            string                  `json:"type"`
 }
 
+// DynamoItemEmail ..
+type DynamoItemEmail struct {
+	ID              string                       `json:"id"`
+	Data            string                       `json:"data"`
+	History         map[string]*EmailHistoryItem `json:"history"`
+	ReceiverAddress string                       `json:"receiverAddress"`
+	StatusText      string                       `json:"statusText"`
+	Type            string                       `json:"type"`
+}
+
 // DynamoItemResponse ..
 type DynamoItemResponse struct {
 	ID   string `json:"id"`
@@ -28,4 +38,12 @@ type HistoryItem struct {
 	Response       string                          `json:"response"`
 	CallbackData   string                          `json:"callback_data"`
 	Payload        *PayloadPostNotificationRequest `json:"payload"`
+}
+
+// EmailHistoryItem ...
+type EmailHistoryItem struct {
+	Provider       string               `json:"provider"`
+	DeliveryReport string               `json:"delivery_report"`
+	Response       string               `json:"response"`
+	Payload        *PayloadRequestEmail `json:"payload"`
 }

@@ -16,6 +16,7 @@ func ProvidersHandler() *Providers {
 type ProvidersInterface interface {
 	OperatorChecker(msisdn string) (*entity.DataProvider, string)
 	InterceptorMessages(data *entity.PostNotificationRequest) *entity.DynamoItem
+	InterceptorEmail(data *entity.PostNotificationRequestEmail) *entity.DynamoItemEmail
 }
 
 func serializeNumber(msisdn string) string {

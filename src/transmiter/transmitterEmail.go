@@ -2,6 +2,7 @@ package transmiter
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -14,24 +15,25 @@ import (
 	"github.com/sofyan48/otp/src/util/helper/request"
 )
 
-// Transmiter ...
-type Transmiter struct {
+// TransmiterEmail ...
+type TransmiterEmail struct {
 	AwsLibs   libaws.AwsInterface
 	Provider  provider.ProvidersInterface
 	Requester request.RequesterInterface
 }
 
-// GetTransmiter ...
-func GetTransmiter() *Transmiter {
-	return &Transmiter{
+// GetTransmiterEmail ...
+func GetTransmiterEmail() *TransmiterEmail {
+	return &TransmiterEmail{
 		AwsLibs:   libaws.AwsHAndler(),
 		Provider:  provider.ProvidersHandler(),
 		Requester: request.RequesterHandler(),
 	}
 }
 
-// ConsumerTrans ...
-func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
+// ConsumerTransEmail ...
+func (trs *TransmiterEmail) ConsumerTransEmail(wg *sync.WaitGroup) {
+	fmt.Println("Email Consumer Exec")
 	shardIterator, err := trs.AwsLibs.GetShardIterator()
 	if err != nil {
 		log.Println(err)
@@ -39,55 +41,32 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 
 	describeInput := trs.AwsLibs.GetDescribeInput()
 	describeInput.SetStreamName("notification")
-	describeInput.SetExclusiveStartShardId(os.Getenv("KINESIS_SHARD_ID"))
+	describeInput.SetExclusiveStartShardId(os.Getenv("KINESIS_SHARD_EMAIL"))
 	for {
 		err := trs.AwsLibs.WaitUntil(describeInput)
 		if err != nil {
 			log.Println("error Wait: ", err)
 		}
-		done := make(chan bool)
 		go func() {
 			msgInput := &kinesis.GetRecordsInput{}
 			msgInput.SetShardIterator(shardIterator)
-
 			data, err := trs.AwsLibs.Consumer(msgInput)
 			if err != nil {
-				log.Println(err)
+				log.Println("Kinesis : ", err)
 			}
-			itemDynamo := &entity.DynamoItem{}
+			itemDynamo := &entity.DynamoItemEmail{}
 			for _, i := range data.Records {
 				err := json.Unmarshal([]byte(string(i.Data)), itemDynamo)
 				if err != nil {
 					log.Println("Error: ", err)
 				}
-				switch itemDynamo.Type {
-				case "sms":
-					trs.intercepActionShardSMS(itemDynamo)
-				case "email":
-					trs.intercepActionShardEmail(itemDynamo)
-				}
-
+				fmt.Println("FROM KINESIS: ", itemDynamo)
+				trs.intercepActionShardEmail(itemDynamo)
 			}
-			close(done)
 			shardIterator = *data.NextShardIterator
 			return
 		}()
-		<-done
-		time.Sleep(5 * time.Second)
+		time.Sleep(3 * time.Second)
 	}
 
-}
-
-// updateDynamoTransmitt ...
-func (trs *Transmiter) updateDynamoTransmitt(ID, status, data string, history *entity.HistoryItem) (string, error) {
-	result, err := trs.AwsLibs.UpdateDynamo(ID, status, data, history)
-	return result.GoString(), err
-}
-
-// TransferToShardReceiver ...
-func (trs *Transmiter) TransferToShardReceiver(historyString string) {}
-
-func checkEnvironment() bool {
-	envi := os.Getenv("APP_ENVIRONMENT")
-	return envi == "development" || envi == "staging"
 }

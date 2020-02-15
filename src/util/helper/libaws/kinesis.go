@@ -2,6 +2,7 @@ package libaws
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -35,6 +36,27 @@ func (aw *Aws) SendStart(ID string, itemDynamo *entity.DynamoItem, stack string,
 		log.Println("error: ", err)
 	}
 	wg.Done()
+	return
+}
+
+// SendMail ...
+func (aw *Aws) SendMail(ID string, itemDynamo *entity.DynamoItemEmail, stack string, wg *sync.WaitGroup) {
+	fmt.Println("SEND DATA: ", itemDynamo)
+	data, err := json.Marshal(itemDynamo)
+	if err != nil {
+		log.Println(err)
+	}
+	svc := aw.GetKinesis()
+	dataSend := &kinesis.PutRecordInput{}
+	dataSend.SetStreamName(os.Getenv("KINESIS_STREAM_NAME"))
+	dataSend.SetPartitionKey(stack)
+	dataSend.SetData(data)
+	results, err := svc.PutRecord(dataSend)
+	if err != nil {
+		log.Println("error: ", err)
+	}
+	// wg.Done()
+	log.Println("Sending", results.GoString())
 	return
 }
 

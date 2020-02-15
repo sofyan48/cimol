@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	dynamoEntyty "github.com/sofyan48/otp/src/entity/http/v1"
+	entity "github.com/sofyan48/otp/src/entity/http/v1"
 )
 
 // Aws ...
@@ -24,6 +25,7 @@ func AwsHAndler() *Aws {
 type AwsInterface interface {
 	// dynamo
 	InputDynamo(itemDynamo *dynamoEntyty.DynamoItem, wg *sync.WaitGroup) (*dynamodb.PutItemOutput, error)
+	InputDynamoEmail(itemDynamo *dynamoEntyty.DynamoItemEmail, wg *sync.WaitGroup) (*dynamodb.PutItemOutput, error)
 	UpdateDynamo(ID, status, data string, history *dynamoEntyty.HistoryItem) (*dynamodb.UpdateItemOutput, error)
 	GetDynamoData(ID string) (*dynamodb.GetItemOutput, error)
 	GetDynamoHistory(receiverAddress string) (*dynamodb.ScanOutput, error)
@@ -32,6 +34,7 @@ type AwsInterface interface {
 	WaitUntil(*kinesis.DescribeStreamInput) error
 	WaitUntilNotExist(data *kinesis.DescribeStreamInput) error
 	SendStart(ID string, itemDynamo *dynamoEntyty.DynamoItem, stack string, wg *sync.WaitGroup)
+	SendMail(ID string, itemDynamo *entity.DynamoItemEmail, stack string, wg *sync.WaitGroup)
 	Send(data []byte, stack string, wg *sync.WaitGroup) (*kinesis.PutRecordOutput, error)
 	GetShardIterator() (string, error)
 	Consumer(data *kinesis.GetRecordsInput) (*kinesis.GetRecordsOutput, error)
