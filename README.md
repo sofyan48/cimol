@@ -1,6 +1,7 @@
 # CIMOL
 ## Notification Service 
 Cimol using AWS Kinesis data streaming system and dynamo to logging all history log
+
 ## Getting Started
 This support For go version 1.13 
 
@@ -45,17 +46,19 @@ SWAGGER_SERVER_ADDRESS=http://localhost:3000
 AWS_ACCESS_KEY=
 AWS_ACCESS_SECRET=
 AWS_DYNAMO_TABLE=
-
-
 KINESIS_STREAM_NAME=
 KINESIS_SHARD_ID=
 KINESIS_SHARD_TYPE=LATEST
 
 ####################################################################
-# SMS PROVIDER CONFIGURATION
+# PROVIDER CONFIGURATION
 ####################################################################
+SMS_ORDER_CONF=[{"provider":""},{"provider":""}]
+EMAIL_ORDER_CONF=[{"provider":""},{"provider":""}]
 
-SMS_ORDER_CONF=[{"provider":"infobip"},{"provider":"wavecell"},{"provider":"twilio"},{"provider":"gosms"}]
+####################################################################
+# INFOBIP CONFIGURATION
+####################################################################
 
 INFOBIP_USERNAME=
 INFOBIP_PASSWORD=
@@ -65,6 +68,9 @@ INFOBIP_CALLBACK=
 INFOBIP_SHARD_ID=
 INFOBIP_SHARD_TYPE=LATEST
 
+####################################################################
+# WAVECELL CONFIGURATION
+####################################################################
 WAVECELL_ACC_ID=
 WAVECELL_SUB_ACC_ID=
 WAVECELL_ACC_TOKEN=
@@ -72,6 +78,22 @@ WAVECELL_SUB_ACC_ID_GENERAL=
 WAVECELL_CALLBACK_URL=
 WAVECELL_SHARD_ID=
 WAVECELL_SHARD_TYPE=LATEST
+
+####################################################################
+# MAILTRAP CONFIGURATION
+####################################################################
+MAILTRAP_HOST=smtp.mailtrap.io
+MAILTRAP_PORT=587
+MAILTRAP_USERNAME=
+MAILTRAP_PASSWORD=
+MAILTRAP_IDENTITY=
+
+####################################################################
+# SENDGRID CONFIGURATION
+####################################################################
+SENDGRID_TOKEN=
+SENDGRID_URL=https://api.sendgrid.com
+
 ```
 
 After environment setting then run your server
