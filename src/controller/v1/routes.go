@@ -43,7 +43,8 @@ func (rLoader *V1RouterLoader) V1Router(router *gin.Engine) {
 // @handler: ControllerGateway
 func (rLoader *V1RouterLoader) routerPostNotification(router *gin.Engine, handler *ctrlNotif.ControllerGateway) {
 	group := router.Group("/v1/notification")
-	group.POST("", handler.PostNotification)
+	group.POST("sms", handler.PostNotification)
+	group.POST("email", handler.PostNotificationEmail)
 	group.GET("history/:receiverAddress", handler.GetHistory)
 	group.GET("id/:id", handler.GetByID)
 }

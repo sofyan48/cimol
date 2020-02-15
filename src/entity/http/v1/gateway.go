@@ -29,9 +29,9 @@ type PostNotificationRequestEmail struct {
 
 // PayloadRequestEmail ...
 type PayloadRequestEmail struct {
-	To         string             `json:"to"`
-	From       string             `json:"from"`
-	Subject    string             `json:"subject"`
-	TemplateID string             `json:"template_id"`
-	Data       map[string]*string `json:"data"`
+	To         string            `json:"to"`
+	From       string            `json:"from"`
+	Subject    string            `json:"subject"`
+	TemplateID string            `json:"template_id"`
+	Data       map[string]string `json:"data"`
 }

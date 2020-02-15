@@ -17,8 +17,6 @@ type ControllerGateway struct {
 
 // PostNotification ...
 func (ctrl *ControllerGateway) PostNotification(context *gin.Context) {
-	// catatan manis untuk infobip jangan lupa untuk mengirim id dari log dynamo ke callback data
-
 	payload := &entity.PostNotificationRequest{}
 	err := context.ShouldBind(payload)
 	if err != nil {
@@ -39,18 +37,18 @@ func (ctrl *ControllerGateway) PostNotification(context *gin.Context) {
 
 // PostNotificationEmail ...
 func (ctrl *ControllerGateway) PostNotificationEmail(context *gin.Context) {
-	// catatan manis untuk infobip jangan lupa untuk mengirim id dari log dynamo ke callback data
-
 	payload := &entity.PostNotificationRequestEmail{}
 	err := context.ShouldBind(payload)
 	if err != nil {
 		rest.ResponseMessages(context, http.StatusBadRequest, err.Error())
 		return
 	}
+	waitgroup := &sync.WaitGroup{}
+	ctrl.ServiceGateway.PostNotificationEmail(payload, waitgroup)
 	result := &entity.PostNotificationResponse{}
 	result.ID = payload.UUID
 	result.Status = "QUEUE"
-	rest.ResponseData(context, http.StatusOK, payload)
+	rest.ResponseData(context, http.StatusOK, result)
 	return
 }
 
