@@ -1,40 +1,41 @@
 package mailtrap
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/smtp"
 	"os"
 
-	"github.com/sofyan48/otp/src/util/helper/request"
+	"gopkg.in/gomail.v2"
 )
 
 // Mailtrap ...
 type Mailtrap struct {
-	Requester request.RequesterInterface
 }
 
 // MailtrapHandler ...
 func MailtrapHandler() *Mailtrap {
-	return &Mailtrap{
-		Requester: request.RequesterHandler(),
-	}
+	return &Mailtrap{}
 }
 
 // MailtrapInterface ...
 type MailtrapInterface interface {
-	SendMail(data string)
+	SendMail(to, subject, data string) error
 }
 
 // SendMail ...
-func (trap *Mailtrap) SendMail(data string) {
-	auth := smtp.PlainAuth("", os.Getenv("MAILTRAP_USERNAME"), os.Getenv("MAILTRAP_PASSWORD"), os.Getenv("MAILTRAP_HOST"))
-	to := []string{"meongbego@gmail.com"}
-	from := os.Getenv("MAILTRAP_IDENTITY")
-	addr := os.Getenv("MAILTRAP_HOST") + ":" + os.Getenv("MAILTRAP_PORT")
-	msg, _ := json.Marshal(data)
-	err := smtp.SendMail(addr, auth, from, to, msg)
+func (trap *Mailtrap) SendMail(to, subject, data string) error {
+	mailer := gomail.NewMessage()
+	mailer.SetHeader("From", os.Getenv("MAILTRAP_IDENTITY"))
+	mailer.SetHeader("To", to)
+	mailer.SetHeader("Subject", subject)
+	mailer.SetBody("text/html", data)
+	dialer := gomail.NewDialer(
+		os.Getenv("MAILTRAP_HOST"),
+		587,
+		os.Getenv("MAILTRAP_USERNAME"),
+		os.Getenv("MAILTRAP_password"),
+	)
+	err := dialer.DialAndSend(mailer)
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
+	return nil
 }

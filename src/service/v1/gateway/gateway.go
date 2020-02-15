@@ -48,7 +48,8 @@ func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, w
 
 // PostNotificationEmail ...
 func (gateway *Gateway) PostNotificationEmail(data *entity.PostNotificationRequestEmail, wg *sync.WaitGroup) {
-	gateway.Sendgrid.SendEmail(data)
+	wg.Add(1)
+	go gateway.Sendgrid.SendEmail(data, wg)
 }
 
 // GetHistory ...

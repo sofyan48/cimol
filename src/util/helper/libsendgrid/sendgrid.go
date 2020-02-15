@@ -2,10 +2,10 @@ package libsendgrid
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"strings"
+	"sync"
 
 	entity "github.com/sofyan48/otp/src/entity/http/v1"
 	"github.com/sofyan48/otp/src/util/helper/mailtrap"
@@ -29,7 +29,7 @@ func LibSendgridHandler() *Libsendgrid {
 // LibsendgridInterface ...
 type LibsendgridInterface interface {
 	GetTemplateID(ID string) (*entity.TemplateResponse, error)
-	SendEmail(data *entity.PostNotificationRequestEmail)
+	SendEmail(data *entity.PostNotificationRequestEmail, wg *sync.WaitGroup)
 }
 
 // GetTemplateID ...
@@ -47,7 +47,7 @@ func (libsengrid *Libsendgrid) GetTemplateID(ID string) (*entity.TemplateRespons
 }
 
 // SendEmail ...
-func (libsengrid *Libsendgrid) SendEmail(data *entity.PostNotificationRequestEmail) {
+func (libsengrid *Libsendgrid) SendEmail(data *entity.PostNotificationRequestEmail, wg *sync.WaitGroup) {
 	if os.Getenv("APP_ENVIRONMENT") != "production" {
 		templateData, err := libsengrid.GetTemplateID(data.Payload.TemplateID)
 		if err != nil {
@@ -57,7 +57,9 @@ func (libsengrid *Libsendgrid) SendEmail(data *entity.PostNotificationRequestEma
 		for key, word := range data.Payload.Data {
 			htmlContent = strings.Replace(htmlContent, key, word, -1)
 		}
-		fmt.Println("OK")
-		libsengrid.Mailtrap.SendMail(htmlContent)
+		libsengrid.Mailtrap.SendMail(data.Payload.To, data.Payload.Subject, htmlContent)
+		wg.Done()
+		return
 	}
+
 }
