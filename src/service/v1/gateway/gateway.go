@@ -1,9 +1,6 @@
 package gateway
 
 import (
-	"fmt"
-	"log"
-	"strings"
 	"sync"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
@@ -51,15 +48,7 @@ func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, w
 
 // PostNotificationEmail ...
 func (gateway *Gateway) PostNotificationEmail(data *entity.PostNotificationRequestEmail, wg *sync.WaitGroup) {
-	templateData, err := gateway.Sendgrid.GetTemplateID(data.Payload.TemplateID)
-	if err != nil {
-		log.Println("Error: ", err)
-	}
-	htmlContent := templateData.Versions[0].HTMLContent
-	for key, word := range data.Payload.Data {
-		htmlContent = strings.Replace(htmlContent, key, word, -1)
-	}
-	fmt.Println(htmlContent)
+	gateway.Sendgrid.SendEmail(data)
 }
 
 // GetHistory ...
