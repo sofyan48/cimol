@@ -4,5 +4,200 @@
         "contact": {},
         "license": {}
     },
-    "paths": {}
+    "paths": {
+        "/history/+6281390232808": {
+          "get": {
+            "description": "",
+            "summary": "HISTORY",
+            "tags": [
+              "CIMOL"
+            ],
+            "operationId": "HISTORY",
+            "deprecated": false,
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [],
+            "responses": {
+              "200": {
+                "description": "",
+                "schema": {
+                  "type": "object"
+                },
+                "headers": {}
+              }
+            }
+          }
+        },
+        "/id/ccdd2d3b-df6c-4cf7-b646-781b9bdaeeaf": {
+          "get": {
+            "description": "",
+            "summary": "GET BY ID",
+            "tags": [
+              "CIMOL"
+            ],
+            "operationId": "GETBYID",
+            "deprecated": false,
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [],
+            "responses": {
+              "200": {
+                "description": "",
+                "schema": {
+                  "type": "object"
+                },
+                "headers": {}
+              }
+            }
+          }
+        },
+        "/sms": {
+          "post": {
+            "description": "",
+            "summary": "SEND SMS",
+            "tags": [
+              "CIMOL"
+            ],
+            "operationId": "SENDSMS",
+            "deprecated": false,
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "Body",
+                "in": "body",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/SENDSMSRequest"
+                }
+              },
+              {
+                "name": "Content-Type",
+                "in": "header",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "",
+                "schema": {
+                  "type": "object"
+                },
+                "headers": {}
+              }
+            }
+          }
+        },
+        "/email": {
+          "post": {
+            "description": "",
+            "summary": "SEND EMAIL",
+            "tags": [
+              "CIMOL"
+            ],
+            "operationId": "SENDEMAIL",
+            "deprecated": false,
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "name": "Body",
+                "in": "body",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/SENDEMAILRequest"
+                }
+              },
+              {
+                "name": "Content-Type",
+                "in": "header",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "",
+                "schema": {
+                  "type": "object"
+                },
+                "headers": {}
+              }
+            }
+          }
+        }
+      },
+      "definitions": {
+        "SENDSMSRequest": {
+          "title": "SENDSMSRequest",
+          "example": {
+            "type": "sms",
+            "uuid": "01033d88-afc7-48d9-85af-27578aff0c73",
+            "payload": {
+              "otp": true,
+              "msisdn": "081247930699",
+              "text": "NEW DAEMON GOLANG SWITCHING TEST"
+            }
+          },
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "uuid": {
+              "type": "string"
+            },
+            "payload": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "type",
+            "uuid",
+            "payload"
+          ]
+        },
+        "SENDEMAILRequest": {
+          "title": "SENDEMAILRequest",
+          "example": {
+            "uuid": "01033d88-afc7-48d9-85af-27578aff0e70",
+            "type": "email",
+            "payload": {
+              "to": "meongbego@gmail.com",
+              "from": "support@ralali.com",
+              "subject": "Testing Email",
+              "data": {
+                "-header_text-": "Ralali",
+                "-nama_buyer-": "testing",
+                "-request_date-": "2020-02-10",
+                "-header_information-": "Pembayaran SKU Anton Cubby",
+                "-submission_date-": "2020-02-10"
+              },
+              "template_id": "1ffa0815-b100-4622-9106-3b1c16170b5b"
+            }
+          },
+          "type": "object",
+          "properties": {
+            "uuid": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "payload": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "uuid",
+            "type",
+            "payload"
+          ]
+        }
+      }
 }
