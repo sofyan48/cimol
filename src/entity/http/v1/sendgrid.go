@@ -27,9 +27,9 @@ type TemplateResponse struct {
 
 // SendPayload ...
 type SendPayload struct {
-	Personalization []PersonalizationData
-	From            []SenderFrom `json:"from"`
-	TemplateID      string       `json:"template_id"`
+	Personalization []PersonalizationData `json:"personalizations"`
+	From            *SenderFrom           `json:"from"`
+	TemplateID      string                `json:"template_id"`
 }
 
 // SenderTo ..

@@ -2,7 +2,6 @@ package libsendgrid
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -63,21 +62,32 @@ func (libsengrid *Libsendgrid) SendEmail(history *entity.EmailHistoryItem) {
 		}
 		return
 	}
+
+	fromMaps := &entity.SenderFrom{}
+	fromMaps.Email = history.Payload.From
+
+	toMaps := entity.SenderTo{}
+	toMaps.Email = history.Payload.To
+	toArr := []entity.SenderTo{toMaps}
+
+	perzonalitations := entity.PersonalizationData{}
+	perzonalitations.Subject = history.Payload.Subject
+	perzonalitations.Substitutions = history.Payload.Data
+	perzonalitations.To = toArr
+	perzonalitationsArr := []entity.PersonalizationData{perzonalitations}
+
 	payloads := &entity.SendPayload{}
-	perzonalitations := []entity.PersonalizationData{}
-	fromPayloads := []entity.SenderFrom{}
-	fromPayloads[0].Email = history.Payload.From
-	payloads.From = fromPayloads
-	toPayloads := []entity.SenderTo{}
-	toPayloads[0].Email = history.Payload.To
-	perzonalitations[0].To = toPayloads
-	perzonalitations[0].Subject = history.Payload.Subject
-	perzonalitations[0].Substitutions = history.Payload.Data
-	payloads.Personalization = perzonalitations
+	payloads.From = fromMaps
+	payloads.Personalization = perzonalitationsArr
 	payloads.TemplateID = history.Payload.TemplateID
-	payloadMarshal, err := json.Marshal(payloads)
+
+	reformatPayload, err := json.Marshal(payloads)
 	if err != nil {
 		log.Println("Error Sending Email: ", err)
 	}
-	fmt.Println(string(payloadMarshal))
+	uri := os.Getenv("SENDGRID_URL") + "/v3/mail/send"
+	_, err = libsengrid.Requester.POST(uri, os.Getenv("SENDGRID_TOKEN"), reformatPayload)
+	if err != nil {
+		log.Println("Error: ", err)
+	}
 }
