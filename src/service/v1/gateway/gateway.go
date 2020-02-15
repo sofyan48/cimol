@@ -52,7 +52,7 @@ func (gateway *Gateway) PostNotificationEmail(data *entity.PostNotificationReque
 	// wg.Add(1)
 	// go gateway.AwsLib.SendMail(data.UUID, itemDynamo, "ïnterceptors", wg)
 
-	gateway.AwsLib.SendMail(data.UUID, itemDynamo, "ïnterceptors", wg)
+	gateway.AwsLib.SendMail(data.UUID, itemDynamo, "email", wg)
 
 	wg.Add(1)
 	go gateway.AwsLib.InputDynamoEmail(itemDynamo, wg)

@@ -41,7 +41,7 @@ func (trs *TransmiterEmail) ConsumerTransEmail(wg *sync.WaitGroup) {
 
 	describeInput := trs.AwsLibs.GetDescribeInput()
 	describeInput.SetStreamName("notification")
-	describeInput.SetExclusiveStartShardId(os.Getenv("KINESIS_SHARD_EMAIL"))
+	describeInput.SetExclusiveStartShardId(os.Getenv("KINESIS_SHARD_ID"))
 	for {
 		err := trs.AwsLibs.WaitUntil(describeInput)
 		if err != nil {
