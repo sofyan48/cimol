@@ -7,7 +7,7 @@ This support For go version 1.13
 
 ### Documentation
 
-![cimol](https://github.com/sofyan48/BOILERGOLANG/blob/master/docs/diagram.png)
+![cimol](https://raw.githubusercontent.com/sofyan48/cimol/master/docs/diagram.png)
 
 
 ### Local Development
