@@ -29,7 +29,7 @@ func (trs *Transmiter) intercepActionShardEmail(data *entity.DynamoItemEmail) {
 	}
 	switch historyProvider {
 	case "sendgrid":
-		fmt.Println("Coming Soon", history)
+		trs.SengridSend(history)
 	default:
 		fmt.Println("Coming Soon")
 	}

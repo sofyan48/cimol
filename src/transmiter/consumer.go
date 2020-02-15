@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	entity "github.com/sofyan48/otp/src/entity/http/v1"
 	"github.com/sofyan48/otp/src/util/helper/libaws"
+	"github.com/sofyan48/otp/src/util/helper/libsendgrid"
 	"github.com/sofyan48/otp/src/util/helper/provider"
 	"github.com/sofyan48/otp/src/util/helper/request"
 )
@@ -20,6 +21,7 @@ type Transmiter struct {
 	AwsLibs   libaws.AwsInterface
 	Provider  provider.ProvidersInterface
 	Requester request.RequesterInterface
+	Sendgrid  libsendgrid.LibsendgridInterface
 }
 
 // GetTransmiter ...
@@ -28,12 +30,13 @@ func GetTransmiter() *Transmiter {
 		AwsLibs:   libaws.AwsHAndler(),
 		Provider:  provider.ProvidersHandler(),
 		Requester: request.RequesterHandler(),
+		Sendgrid:  libsendgrid.LibSendgridHandler(),
 	}
 }
 
 // ConsumerTrans ...
 func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
-	fmt.Println("SMS Consumer Exec")
+	fmt.Println("Consumer Running")
 	shardIterator, err := trs.AwsLibs.GetShardIterator()
 	if err != nil {
 		log.Println(err)
@@ -47,10 +50,10 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 		if err != nil {
 			log.Println("error Wait: ", err)
 		}
+		done := make(chan bool)
 		go func() {
 			msgInput := &kinesis.GetRecordsInput{}
 			msgInput.SetShardIterator(shardIterator)
-
 			data, err := trs.AwsLibs.Consumer(msgInput)
 			if err != nil {
 				log.Println(err)
@@ -58,6 +61,7 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 			selectionType := &entity.DataReceiveSelection{}
 			for _, i := range data.Records {
 				json.Unmarshal([]byte(string(i.Data)), selectionType)
+				fmt.Println("Receive: ", selectionType.Type)
 				switch selectionType.Type {
 				case "sms":
 					itemSMS := &entity.DynamoItem{}
@@ -68,11 +72,12 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 					json.Unmarshal([]byte(string(i.Data)), itemEmail)
 					trs.intercepActionShardEmail(itemEmail)
 				}
-
 			}
+			close(done)
 			shardIterator = *data.NextShardIterator
 			return
 		}()
+		<-done
 		time.Sleep(3 * time.Second)
 	}
 

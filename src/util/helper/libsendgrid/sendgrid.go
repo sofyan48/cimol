@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"strings"
-	"sync"
 
 	entity "github.com/sofyan48/otp/src/entity/http/v1"
 	"github.com/sofyan48/otp/src/util/helper/mailtrap"
@@ -29,7 +28,7 @@ func LibSendgridHandler() *Libsendgrid {
 // LibsendgridInterface ...
 type LibsendgridInterface interface {
 	GetTemplateID(ID string) (*entity.TemplateResponse, error)
-	SendEmail(data *entity.PostNotificationRequestEmail, wg *sync.WaitGroup)
+	SendEmail(data *entity.EmailHistoryItem)
 }
 
 // GetTemplateID ...
@@ -47,18 +46,20 @@ func (libsengrid *Libsendgrid) GetTemplateID(ID string) (*entity.TemplateRespons
 }
 
 // SendEmail ...
-func (libsengrid *Libsendgrid) SendEmail(data *entity.PostNotificationRequestEmail, wg *sync.WaitGroup) {
+func (libsengrid *Libsendgrid) SendEmail(history *entity.EmailHistoryItem) {
 	if os.Getenv("APP_ENVIRONMENT") != "production" {
-		templateData, err := libsengrid.GetTemplateID(data.Payload.TemplateID)
+		templateData, err := libsengrid.GetTemplateID(history.Payload.TemplateID)
 		if err != nil {
 			log.Println("Error: ", err)
 		}
 		htmlContent := templateData.Versions[0].HTMLContent
-		for key, word := range data.Payload.Data {
+		for key, word := range history.Payload.Data {
 			htmlContent = strings.Replace(htmlContent, key, word, -1)
 		}
-		libsengrid.Mailtrap.SendMail(data.Payload.To, data.Payload.Subject, htmlContent)
-		wg.Done()
+		err = libsengrid.Mailtrap.SendMail(history.Payload.To, history.Payload.Subject, htmlContent)
+		if err != nil {
+			log.Println("Error Sending Email: ", err)
+		}
 		return
 	}
 

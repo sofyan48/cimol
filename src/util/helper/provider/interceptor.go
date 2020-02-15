@@ -70,6 +70,7 @@ func (prv *Providers) InterceptorEmail(data *entity.PostNotificationRequestEmail
 	historyPayload := &entity.PayloadRequestEmail{}
 	historyPayload.Data = data.Payload.Data
 	historyPayload.To = data.Payload.To
+	historyPayload.TemplateID = data.Payload.TemplateID
 	historyPayload.From = data.Payload.From
 
 	historyValue := &entity.EmailHistoryItem{}

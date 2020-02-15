@@ -37,10 +37,8 @@ type GatewayInterface interface {
 // PostNotification ...
 func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, wg *sync.WaitGroup) {
 	itemDynamo := gateway.Providers.InterceptorMessages(data)
-
 	wg.Add(1)
 	go gateway.AwsLib.SendStart(data.UUID, itemDynamo, "interceptors", wg)
-
 	wg.Add(1)
 	go gateway.AwsLib.InputDynamo(itemDynamo, wg)
 
@@ -49,11 +47,8 @@ func (gateway *Gateway) PostNotification(data *entity.PostNotificationRequest, w
 // PostNotificationEmail ...
 func (gateway *Gateway) PostNotificationEmail(data *entity.PostNotificationRequestEmail, wg *sync.WaitGroup) {
 	itemDynamo := gateway.Providers.InterceptorEmail(data)
-	// wg.Add(1)
-	// go gateway.AwsLib.SendMail(data.UUID, itemDynamo, "ïnterceptors", wg)
-
+	wg.Add(1)
 	gateway.AwsLib.SendMail(data.UUID, itemDynamo, "email", wg)
-
 	wg.Add(1)
 	go gateway.AwsLib.InputDynamoEmail(itemDynamo, wg)
 
