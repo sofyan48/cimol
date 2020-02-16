@@ -99,6 +99,12 @@ MAILTRAP_IDENTITY=
 SENDGRID_TOKEN=
 SENDGRID_URL=https://api.sendgrid.com
 
+####################################################################
+# FCM CONFIGURATION
+####################################################################
+FCM_APIKEY=
+FCM_SENDER_ID=
+
 ```
 
 After environment setting then run your server

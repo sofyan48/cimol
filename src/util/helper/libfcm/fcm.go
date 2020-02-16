@@ -22,7 +22,7 @@ type FCMNotifInterface interface {
 }
 
 // Send ...
-func (push *FCMNotif) Send(deviceToken string, data map[string]string) {
+func (push *FCMNotif) Send(deviceToken string, data map[string]interface{}) {
 	msg := &fcm.Message{
 		To:   deviceToken,
 		Data: data,
