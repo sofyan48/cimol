@@ -52,6 +52,22 @@ func (ctrl *ControllerGateway) PostNotificationEmail(context *gin.Context) {
 	return
 }
 
+// PostNotificationPush ...
+func (ctrl *ControllerGateway) PostNotificationPush(context *gin.Context) {
+	payload := &entity.PostNotificationRequestPush{}
+	err := context.ShouldBind(payload)
+	if err != nil {
+		rest.ResponseMessages(context, http.StatusBadRequest, err.Error())
+		return
+	}
+	ctrl.ServiceGateway.PostNotificationPush()
+	result := &entity.PostNotificationResponse{}
+	result.ID = payload.UUID
+	result.Status = "QUEUE"
+	rest.ResponseData(context, http.StatusOK, result)
+	return
+}
+
 // GetHistory ...
 func (ctrl *ControllerGateway) GetHistory(context *gin.Context) {
 	history, err := ctrl.ServiceGateway.GetHistory(context.Param("receiverAddress"))

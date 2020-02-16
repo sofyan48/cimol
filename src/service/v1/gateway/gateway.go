@@ -32,6 +32,7 @@ type GatewayInterface interface {
 	PostNotificationEmail(data *entity.PostNotificationRequestEmail, wg *sync.WaitGroup)
 	GetHistory(msisdn string) ([]entity.DynamoItemHistory, error)
 	GetByID(ID string) (*entity.DynamoItemHistory, error)
+	PostNotificationPush()
 }
 
 // PostNotification ...
@@ -51,6 +52,11 @@ func (gateway *Gateway) PostNotificationEmail(data *entity.PostNotificationReque
 	gateway.AwsLib.SendMail(data.UUID, itemDynamo, "email", wg)
 	wg.Add(1)
 	go gateway.AwsLib.InputDynamoEmail(itemDynamo, wg)
+
+}
+
+// PostNotificationPush ...
+func (gateway *Gateway) PostNotificationPush() {
 
 }
 

@@ -35,3 +35,9 @@ type PayloadRequestEmail struct {
 	TemplateID string            `json:"template_id"`
 	Data       map[string]string `json:"data"`
 }
+
+// PostNotificationRequestPush ...
+type PostNotificationRequestPush struct {
+	Type string `json:"type"`
+	UUID string `json:"uuid"`
+}

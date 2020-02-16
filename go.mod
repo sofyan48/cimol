@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
+	github.com/appleboy/go-fcm v0.1.5 // indirect
 	github.com/aws/aws-sdk-go v1.26.3
 	github.com/gin-gonic/gin v1.4.0
 	github.com/joho/godotenv v1.3.0

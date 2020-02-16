@@ -45,6 +45,7 @@ func (rLoader *V1RouterLoader) routerPostNotification(router *gin.Engine, handle
 	group := router.Group("/v1/notification")
 	group.POST("sms", handler.PostNotification)
 	group.POST("email", handler.PostNotificationEmail)
+	group.POST("push", handler.PostNotificationPush)
 	group.GET("history/:receiverAddress", handler.GetHistory)
 	group.GET("id/:id", handler.GetByID)
 }
