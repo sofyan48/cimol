@@ -29,6 +29,7 @@ type AwsInterface interface {
 	UpdateDynamo(ID, status, data string, history *dynamoEntyty.HistoryItem) (*dynamodb.UpdateItemOutput, error)
 	GetDynamoData(ID string) (*dynamodb.GetItemOutput, error)
 	GetDynamoHistory(receiverAddress string) (*dynamodb.ScanOutput, error)
+	CallbackSendUpdate(ID, status, oldHistory string, newHistory string) (*dynamodb.UpdateItemOutput, error)
 	// kinesis
 	WaitUntil(*kinesis.DescribeStreamInput) error
 	WaitUntilNotExist(data *kinesis.DescribeStreamInput) error
