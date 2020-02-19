@@ -1,7 +1,7 @@
 package v1
 
-// WavecelllCallBackRequest ...
-type WavecelllCallBackRequest struct {
+// WavecellCallBackRequest ...
+type WavecellCallBackRequest struct {
 	UmID            string `json:"umid"`
 	Timestamp       string `json:"timestamp"`
 	Status          string `json:"status"`

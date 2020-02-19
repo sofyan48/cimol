@@ -23,11 +23,11 @@ func ReceiverHandler() *Receiver {
 // ReceiverInterface ...
 type ReceiverInterface interface {
 	InfobipReceiver(ID string, data *entity.InfobipCallbackRequest)
-	WavecellReceiver(ID string, data *entity.WavecelllCallBackRequest) (string, error)
+	WavecellReceiver(ID string, data *entity.WavecellCallBackRequest) (string, error)
 }
 
 // TwilioReceiver ...
-func (rcv *Receiver) TwilioReceiver(ID string, data *entity.WavecelllCallBackRequest) (string, error) {
+func (rcv *Receiver) TwilioReceiver(ID string, data *entity.WavecellCallBackRequest) (string, error) {
 
 	return "", nil
 }

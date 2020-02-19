@@ -34,7 +34,7 @@ func (ctrl *ControllerReceiver) InfobipReceiver(context *gin.Context) {
 
 // WavecellReceiver ...
 func (ctrl *ControllerReceiver) WavecellReceiver(context *gin.Context) {
-	payload := &entity.WavecelllCallBackRequest{}
+	payload := &entity.WavecellCallBackRequest{}
 	err := context.ShouldBind(payload)
 	if err != nil {
 		rest.ResponseMessages(context, http.StatusBadRequest, err.Error())

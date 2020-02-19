@@ -9,7 +9,7 @@ import (
 )
 
 // WavecellReceiver ...
-func (rcv *Receiver) WavecellReceiver(ID string, data *entity.WavecelllCallBackRequest) (string, error) {
+func (rcv *Receiver) WavecellReceiver(ID string, data *entity.WavecellCallBackRequest) (string, error) {
 	dynamoItem := &entity.DynamoItemResponse{}
 	dynamoData, err := rcv.AwsLib.GetDynamoData(ID)
 	if err != nil {
@@ -20,9 +20,10 @@ func (rcv *Receiver) WavecellReceiver(ID string, data *entity.WavecelllCallBackR
 		log.Println("Error: ", err)
 	}
 	historyItems := &entity.HistoryItem{}
-	err = json.Unmarshal([]byte(dynamoItem.History[1]), historyItems)
+	err = json.Unmarshal([]byte(dynamoItem.History[0]), historyItems)
 	if err != nil {
 		log.Println("Error: ", err)
 	}
+	rcv.Callback.WavecellCallback(dynamoItem, data, historyItems)
 	return "", nil
 }
