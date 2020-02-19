@@ -17,6 +17,14 @@ func (callback *ProviderCallback) InfobipCallback(dynamo *entity.DynamoItemRespo
 		callback.InfobipCallback(dynamo, data, history)
 		return
 	}
+	callback.infobipSuccessReport(dynamo, data, history)
+}
+
+func (callback *ProviderCallback) infobipSuccessReport(dynamo *entity.DynamoItemResponse,
+	data *entity.InfobipCallbackRequest, history *entity.HistoryItem) {
+	oldHistory, _ := json.Marshal(dynamo.History)
+	newHistory, _ := json.Marshal(data)
+	callback.AwsLib.CallbackSendUpdate(history.CallbackData, data.Results[0].Status.Name, string(oldHistory), string(newHistory))
 }
 
 func (callback *ProviderCallback) infobipMessagesNotSuccess(dynamo *entity.DynamoItemResponse,
