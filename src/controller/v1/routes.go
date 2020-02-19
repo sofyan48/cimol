@@ -56,4 +56,5 @@ func (rLoader *V1RouterLoader) routerPostNotification(router *gin.Engine, handle
 func (rLoader *V1RouterLoader) routerReceiver(router *gin.Engine, handler *ctrlRcv.ControllerReceiver) {
 	group := router.Group("/v1/receiver")
 	group.POST("infobip", handler.InfobipReceiver)
+	group.POST("wavecell", handler.WavecellReceiver)
 }

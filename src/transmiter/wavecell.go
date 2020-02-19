@@ -2,7 +2,6 @@ package transmiter
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,8 +15,9 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 	reformatPayload.Destination = payload.Payload.Msisdn
 	reformatPayload.Source = os.Getenv("WAVECELL_ACC_ID")
 	reformatPayload.Text = payload.Payload.Text
+	reformatPayload.ClientMessageID = payload.CallbackData
 	reformatPayload.DLRCallback = os.Getenv("WAVECELL_CALLBACK_URL")
-	if !checkEnvironment() {
+	if checkEnvironment() {
 		_, err := trs.updateDynamoTransmitt(payload.CallbackData, "SENDED", "", payload)
 		if err != nil {
 			log.Println("Wavecell Transmitter Dynamo: ", err)
@@ -25,11 +25,11 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 		return
 	}
 	wavecelSendURL := "https://api.wavecell.com/sms/v1/" + os.Getenv("WAVECELL_SUB_ACC_ID_GENERAL") + "/single"
-	fmt.Println("WAVECELL OTP: ", payload.Payload.OTP)
 	if payload.Payload.OTP == true {
 		wavecelSendURL = "https://api.wavecell.com/sms/v1/" + os.Getenv("WAVECELL_SUB_ACC_ID") + "/single"
 	}
 	wavecellReformatPayload, err := json.Marshal(reformatPayload)
+
 	client, err := trs.Requester.CLIENT("POST", wavecelSendURL, wavecellReformatPayload)
 	if err != nil {
 		log.Println("Error: ", err)
@@ -44,7 +44,7 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Println("Wavecell Transmitter: ", err)
+		log.Println("Error: ", err)
 	}
 	wavecellResponse := &entity.WavecellResponse{}
 	json.Unmarshal(body, wavecellResponse)
@@ -57,7 +57,7 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 		wavecellResponse.Status.Code,
 		string(bodyResultHistory), payload)
 	if err != nil {
-		log.Println("Wavecell Transmitter Dynamo: ", err)
+		log.Println("Error: ", err)
 	}
 	log.Println("SMS SEND: ", string(body))
 }

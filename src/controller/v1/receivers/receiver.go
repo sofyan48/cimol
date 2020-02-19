@@ -40,7 +40,7 @@ func (ctrl *ControllerReceiver) WavecellReceiver(context *gin.Context) {
 		rest.ResponseMessages(context, http.StatusBadRequest, err.Error())
 		return
 	}
-	id := "afc3651c-ff8e-4d07-83cc-433a2e67d775"
+	id := payload.ClientMessageID
 	ctrl.ServiceReceivers.WavecellReceiver(id, payload)
 	rest.ResponseData(context, http.StatusOK, payload)
 	return

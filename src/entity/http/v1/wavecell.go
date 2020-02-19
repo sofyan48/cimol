@@ -5,12 +5,12 @@ type WavecelllCallBackRequest struct {
 	UmID            string `json:"umid"`
 	Timestamp       string `json:"timestamp"`
 	Status          string `json:"status"`
-	StatusCode      string `json:"statusCode"`
+	StatusCode      uint   `json:"statusCode"`
 	Error           string `json:"error"`
 	ErrorCode       uint   `json:"errorCode"`
 	Source          string `json:"Source"`
 	SubAccountID    string `json:"subAccountId"`
-	Version         string `json:"version"`
+	Version         uint   `json:"version"`
 	Destination     string `json:"destination"`
 	BatchID         string `json:"batchId"`
 	ClientMessageID string `json:"clientMessageId"`
@@ -25,10 +25,11 @@ type WavecelllCallBackRequest struct {
 
 // WavecellRequest ...
 type WavecellRequest struct {
-	Source      string `json:"source"`
-	Destination string `json:"destination"`
-	Text        string `json:"text"`
-	DLRCallback string `json:"dlrCallbackUrl"`
+	Source          string `json:"source"`
+	Destination     string `json:"destination"`
+	Text            string `json:"text"`
+	ClientMessageID string `json:"clientMessageId"`
+	DLRCallback     string `json:"dlrCallbackUrl"`
 }
 
 // WavecellCallbackRequest ...
