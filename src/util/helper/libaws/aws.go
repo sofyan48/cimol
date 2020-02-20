@@ -10,15 +10,19 @@ import (
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	dynamoEntyty "github.com/sofyan48/cimol/src/entity/http/v1"
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
+	"github.com/sofyan48/cimol/src/util/helper/storage"
 )
 
 // Aws ...
 type Aws struct {
+	Storage storage.StorageInterface
 }
 
 // AwsHAndler ..
 func AwsHAndler() *Aws {
-	return &Aws{}
+	return &Aws{
+		Storage: storage.StorageHandler(),
+	}
 }
 
 // AwsInterface ...
@@ -40,6 +44,10 @@ type AwsInterface interface {
 	Consumer(data *kinesis.GetRecordsInput) (*kinesis.GetRecordsOutput, error)
 	GetDescribeInput() *kinesis.DescribeStreamInput
 	Describe(data *kinesis.DescribeStreamInput) (*kinesis.DescribeStreamOutput, error)
+
+	// S3 Storage
+
+	UploadFile(data interface{}, ID, types, status string)
 }
 
 // Sessions ...

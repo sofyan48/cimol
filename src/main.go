@@ -9,6 +9,7 @@ import (
 
 	"github.com/sofyan48/cimol/src/config"
 	"github.com/sofyan48/cimol/src/transmiter"
+	"github.com/sofyan48/cimol/src/util/helper/storage"
 
 	"github.com/joho/godotenv"
 	"github.com/sofyan48/cimol/src/routes"
@@ -25,6 +26,11 @@ func ConfigEnvironment(env string) {
 }
 
 func main() {
+	// starting metric storage
+	metric := storage.StorageHandler()
+	metric.CreateMetricFolder()
+	// end metric storage
+
 	environment := flag.String("e", "development", "")
 	flag.Usage = func() {
 		fmt.Println("Usage: server -e {mode}")
