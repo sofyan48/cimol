@@ -27,6 +27,8 @@ type StorageInterface interface {
 	CreateFolderTree(dir string) bool
 	CreateFile(path, fileName string)
 	ReadDir(path string) []string
+	RemoveFile(path string) bool
+	RemoveContents(dir string) error
 	CreateJSONFile(data interface{}, path, fileName string) error
 }
 
@@ -106,6 +108,35 @@ func (file *Storage) CreateJSONFile(data interface{}, path, fileName string) err
 // ReadFile ...
 func (file *Storage) ReadFile(path, fileName string) {
 
+}
+
+// RemoveContents ...
+func (file *Storage) RemoveContents(dir string) error {
+	d, err := os.Open(dir)
+	if err != nil {
+		return err
+	}
+	defer d.Close()
+	names, err := d.Readdirnames(-1)
+	if err != nil {
+		return err
+	}
+	for _, name := range names {
+		err = os.RemoveAll(filepath.Join(dir, name))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// RemoveFile ...
+func (file *Storage) RemoveFile(path string) bool {
+	err := os.Remove(path)
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 // CreateMetricFolder ...

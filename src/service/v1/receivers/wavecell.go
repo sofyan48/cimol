@@ -20,7 +20,7 @@ func (rcv *Receiver) WavecellReceiver(ID string, data *entity.WavecellCallBackRe
 	}
 
 	historyItems := &entity.HistoryItem{}
-	err = json.Unmarshal([]byte(dynamoItem.History[1]), historyItems)
+	err = json.Unmarshal([]byte(dynamoItem.History[0]), historyItems)
 	if err != nil {
 		rcv.Logs.Write("Receiver", err.Error())
 	}

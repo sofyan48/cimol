@@ -25,7 +25,6 @@ func (callback *ProviderCallback) wavecellSuccessReport(dynamo *entity.DynamoIte
 	data *entity.WavecellCallBackRequest, history *entity.HistoryItem, wg *sync.WaitGroup) {
 	oldHistory, _ := json.Marshal(dynamo.History)
 	newHistory, _ := json.Marshal(data)
-	callback.AwsLib.UploadFile(dynamo, data.ClientMessageID, "sms", "sended")
 	callback.AwsLib.CallbackSendUpdate(history.CallbackData, data.Status, string(oldHistory), string(newHistory))
 	wg.Done()
 }

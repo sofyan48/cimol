@@ -21,7 +21,8 @@ func (aw *Aws) GetStorage() *s3.S3 {
 // UploadFile ...
 func (aw *Aws) UploadFile(data interface{}, ID, types, status string) {
 	now := time.Now()
-	path := "./metric/" + types + "/" + now.Format("01-02-2006") + "/" + ID
+	rootPath := "./metric/" + types + "/"
+	path := rootPath + now.Format("01-02-2006") + "/" + ID
 
 	aw.Storage.CreateFolderTree(path)
 	aw.Storage.CreateJSONFile(data, path, status)
@@ -47,7 +48,14 @@ func (aw *Aws) UploadFile(data interface{}, ID, types, status string) {
 		ContentType:   aws.String(fileType),
 	}
 	svc := aw.GetStorage()
-	svc.PutObject(params)
+	_, err := svc.PutObject(params)
+	if err != nil {
+		aw.Logs.Write("AWS LIB", err.Error())
+	}
+	err = aw.Storage.RemoveContents(rootPath)
+	if err != nil {
+		aw.Logs.Write("AWS LIB", err.Error())
+	}
 
 }
 
