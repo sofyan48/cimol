@@ -42,6 +42,6 @@ func (ctrl *ControllerReceiver) WavecellReceiver(context *gin.Context) {
 	}
 	id := payload.ClientMessageID
 	ctrl.ServiceReceivers.WavecellReceiver(id, payload)
-	rest.ResponseData(context, http.StatusOK, payload)
+	rest.ResponseMessages(context, http.StatusOK, "QUEUE")
 	return
 }

@@ -12,7 +12,7 @@ func (trs *Transmiter) intercepActionShardSMS(data *entity.DynamoItem) {
 	dataThirdParty := make([]entity.DataProvider, 0)
 	err := json.Unmarshal([]byte(os.Getenv("SMS_ORDER_CONF")), &dataThirdParty)
 	if err != nil {
-		log.Println("Error: ", err)
+		trs.Logs.Write("Transmitter SMS", err.Error())
 	}
 	history := &entity.HistoryItem{}
 	var historyProvider string

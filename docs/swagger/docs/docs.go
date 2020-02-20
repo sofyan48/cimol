@@ -27,200 +27,461 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/history/+6281247930699": {
-          "get": {
-            "description": "",
-            "summary": "HISTORY",
-            "tags": [
-              "CIMOL"
-            ],
-            "operationId": "HISTORY",
-            "deprecated": false,
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [],
-            "responses": {
-              "200": {
-                "description": "",
-                "schema": {
-                  "type": "object"
-                },
-                "headers": {}
+      "/receiver/infobip": {
+        "post": {
+          "description": "",
+          "summary": "INFOBIP RECEIVER CALLBACK",
+          "tags": [
+            "CIMOL"
+          ],
+          "operationId": "INFOBIPRECEIVERCALLBACK",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/INFOBIPRECEIVERCALLBACKRequest"
               }
+            },
+            {
+              "name": "Content-Type",
+              "in": "header",
+              "required": true,
+              "type": "string"
             }
-          }
-        },
-        "/id/ccdd2d3b-df6c-4cf7-b646-781b9bdaeeaf": {
-          "get": {
-            "description": "",
-            "summary": "GET BY ID",
-            "tags": [
-              "CIMOL"
-            ],
-            "operationId": "GETBYID",
-            "deprecated": false,
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [],
-            "responses": {
-              "200": {
-                "description": "",
-                "schema": {
-                  "type": "object"
-                },
-                "headers": {}
-              }
-            }
-          }
-        },
-        "/sms": {
-          "post": {
-            "description": "",
-            "summary": "SEND SMS",
-            "tags": [
-              "CIMOL"
-            ],
-            "operationId": "SENDSMS",
-            "deprecated": false,
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [
-              {
-                "name": "Body",
-                "in": "body",
-                "required": true,
-                "schema": {
-                  "$ref": "#/definitions/SENDSMSRequest"
-                }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "type": "object"
               },
-              {
-                "name": "Content-Type",
-                "in": "header",
-                "required": true,
-                "type": "string"
-              }
-            ],
-            "responses": {
-              "200": {
-                "description": "",
-                "schema": {
-                  "type": "object"
-                },
-                "headers": {}
-              }
-            }
-          }
-        },
-        "/email": {
-          "post": {
-            "description": "",
-            "summary": "SEND EMAIL",
-            "tags": [
-              "CIMOL"
-            ],
-            "operationId": "SENDEMAIL",
-            "deprecated": false,
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [
-              {
-                "name": "Body",
-                "in": "body",
-                "required": true,
-                "schema": {
-                  "$ref": "#/definitions/SENDEMAILRequest"
-                }
-              },
-              {
-                "name": "Content-Type",
-                "in": "header",
-                "required": true,
-                "type": "string"
-              }
-            ],
-            "responses": {
-              "200": {
-                "description": "",
-                "schema": {
-                  "type": "object"
-                },
-                "headers": {}
-              }
+              "headers": {}
             }
           }
         }
       },
-      "definitions": {
-        "SENDSMSRequest": {
-          "title": "SENDSMSRequest",
-          "example": {
-            "type": "sms",
-            "uuid": "01033d88-afc7-48d9-85af-27578aff0c73",
-            "payload": {
-              "otp": true,
-              "msisdn": "081247930699",
-              "text": "NEW DAEMON GOLANG SWITCHING TEST"
-            }
-          },
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string"
+      "/receiver/wavecell": {
+        "post": {
+          "description": "",
+          "summary": "WAVECELL RECEIVER CALLBACK",
+          "tags": [
+            "CIMOL"
+          ],
+          "operationId": "WAVECELLRECEIVERCALLBACK",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/WAVECELLRECEIVERCALLBACKRequest"
+              }
             },
-            "uuid": {
+            {
+              "name": "Content-Type",
+              "in": "header",
+              "required": true,
               "type": "string"
-            },
-            "payload": {
-              "type": "object"
             }
-          },
-          "required": [
-            "type",
-            "uuid",
-            "payload"
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "type": "object"
+              },
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/notification/history/+6281390232808": {
+        "get": {
+          "description": "",
+          "summary": "HISTORY",
+          "tags": [
+            "CIMOL"
+          ],
+          "operationId": "HISTORY",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "type": "object"
+              },
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/notification/id/ccdd2d3b-df6c-4cf7-b646-781b9bdaeeaf": {
+        "get": {
+          "description": "",
+          "summary": "GET BY ID",
+          "tags": [
+            "CIMOL"
+          ],
+          "operationId": "GETBYID",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "type": "object"
+              },
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/notification/push": {
+        "post": {
+          "description": "",
+          "summary": "SEND PUSH NOTIF",
+          "tags": [
+            "CIMOL"
+          ],
+          "operationId": "SENDPUSHNOTIF",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/SENDPUSHNOTIFRequest"
+              }
+            },
+            {
+              "name": "Content-Type",
+              "in": "header",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "type": "object"
+              },
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/notification/sms": {
+        "post": {
+          "description": "",
+          "summary": "SEND SMS",
+          "tags": [
+            "CIMOL"
+          ],
+          "operationId": "SENDSMS",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/SENDSMSRequest"
+              }
+            },
+            {
+              "name": "Content-Type",
+              "in": "header",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "type": "object"
+              },
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/notification/email": {
+        "post": {
+          "description": "",
+          "summary": "SEND EMAIL",
+          "tags": [
+            "CIMOL"
+          ],
+          "operationId": "SENDEMAIL",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/SENDEMAILRequest"
+              }
+            },
+            {
+              "name": "Content-Type",
+              "in": "header",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "type": "object"
+              },
+              "headers": {}
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "INFOBIPRECEIVERCALLBACKRequest": {
+        "title": "INFOBIPRECEIVERCALLBACKRequest",
+        "example": {
+          "results": [
+            {
+              "to": "081247930699",
+              "status": {
+                "groupId": 1,
+                "groupName": "PENDING",
+                "id": 26,
+                "name": "PENDING_ACCEPTED",
+                "description": "Message sent to next instance"
+              },
+              "messageId": "28028828021003572358",
+              "callbackData": "01033d88-afc7-48d9-85af-27578aff0c73"
+            }
           ]
         },
-        "SENDEMAILRequest": {
-          "title": "SENDEMAILRequest",
-          "example": {
-            "uuid": "01033d88-afc7-48d9-85af-27578aff0e70",
-            "type": "email",
-            "payload": {
-              "to": "meongbego@gmail.com",
-              "from": "support@ralali.com",
-              "subject": "Testing Email",
-              "data": {
-                "-header_text-": "Ralali",
-                "-nama_buyer-": "testing",
-                "-request_date-": "2020-02-10",
-                "-header_information-": "Pembayaran SKU Anton Cubby",
-                "-submission_date-": "2020-02-10"
-              },
-              "template_id": "1ffa0815-b100-4622-9106-3b1c16170b5b"
-            }
-          },
-          "type": "object",
-          "properties": {
-            "uuid": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            },
-            "payload": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
               "type": "object"
             }
+          }
+        },
+        "required": [
+          "results"
+        ]
+      },
+      "WAVECELLRECEIVERCALLBACKRequest": {
+        "title": "WAVECELLRECEIVERCALLBACKRequest",
+        "example": {
+          "umid": "daf17444-d352-ea11-8273-00155d4ff7ed",
+          "timestamp": "2020-02-19T04:49:58.3806613Z",
+          "status": "DELIVERED TO CARRIER",
+          "statusCode": 30,
+          "error": null,
+          "errorCode": 0,
+          "source": "RALALI",
+          "subAccountId": "Ralali_1",
+          "version": 6,
+          "destination": "+6287788935182",
+          "batchId": null,
+          "clientMessageId": "01033d88-afc7-48d9-85af-27578aff0c74",
+          "clientBatchId": null,
+          "price": {
+            "total": 0.02032,
+            "perSms": 0.02032,
+            "currency": "EUR"
           },
-          "required": [
-            "uuid",
-            "type",
-            "payload"
-          ]
-        }
+          "smsCount": 1
+        },
+        "type": "object",
+        "properties": {
+          "umid": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "error": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "source": {
+            "type": "string"
+          },
+          "subAccountId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "destination": {
+            "type": "string"
+          },
+          "batchId": {
+            "type": "string"
+          },
+          "clientMessageId": {
+            "type": "string"
+          },
+          "clientBatchId": {
+            "type": "string"
+          },
+          "price": {
+            "type": "object"
+          },
+          "smsCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "umid",
+          "timestamp",
+          "status",
+          "statusCode",
+          "error",
+          "errorCode",
+          "source",
+          "subAccountId",
+          "version",
+          "destination",
+          "batchId",
+          "clientMessageId",
+          "clientBatchId",
+          "price",
+          "smsCount"
+        ]
+      },
+      "SENDPUSHNOTIFRequest": {
+        "title": "SENDPUSHNOTIFRequest",
+        "example": {
+          "type": "sms",
+          "uuid": "01033d88-afc7-48d9-85af-27578aff0c73"
+        },
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "uuid"
+        ]
+      },
+      "SENDSMSRequest": {
+        "title": "SENDSMSRequest",
+        "example": {
+          "type": "sms",
+          "uuid": "01033d88-afc7-48d9-85af-27578aff0c74",
+          "payload": {
+            "otp": true,
+            "msisdn": "087788935182",
+            "text": "GO DAEMON NEW"
+          }
+        },
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "uuid": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "type",
+          "uuid",
+          "payload"
+        ]
+      },
+      "SENDEMAILRequest": {
+        "title": "SENDEMAILRequest",
+        "example": {
+          "uuid": "01033d88-afc7-48d9-85af-27578aff0e70",
+          "type": "email",
+          "payload": {
+            "to": "meongbego@gmail.com",
+            "from": "support@ralali.com",
+            "subject": "Testing Email",
+            "data": {
+              "-header_text-": "Ralali",
+              "-nama_buyer-": "testing",
+              "-request_date-": "2020-02-10",
+              "-header_information-": "Pembayaran SKU Anton Cubby",
+              "-submission_date-": "2020-02-10"
+            },
+            "template_id": "1ffa0815-b100-4622-9106-3b1c16170b5b"
+          }
+        },
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "uuid",
+          "type",
+          "payload"
+        ]
+      }
     }
 }`
 

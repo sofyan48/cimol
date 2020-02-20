@@ -4,12 +4,14 @@ import (
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
 	"github.com/sofyan48/cimol/src/util/callbackprovider"
 	"github.com/sofyan48/cimol/src/util/helper/libaws"
+	"github.com/sofyan48/cimol/src/util/helper/logging"
 )
 
 // Receiver ...
 type Receiver struct {
 	AwsLib   libaws.AwsInterface
 	Callback callbackprovider.ProviderCallbackInterface
+	Logs     logging.LogInterface
 }
 
 // ReceiverHandler ...
@@ -17,6 +19,7 @@ func ReceiverHandler() *Receiver {
 	return &Receiver{
 		AwsLib:   libaws.AwsHAndler(),
 		Callback: callbackprovider.ProviderCallbackHandler(),
+		Logs:     logging.LogHandler(),
 	}
 }
 

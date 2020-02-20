@@ -3,7 +3,6 @@ package transmiter
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"sync"
 	"time"
@@ -12,6 +11,7 @@ import (
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
 	"github.com/sofyan48/cimol/src/util/helper/libaws"
 	"github.com/sofyan48/cimol/src/util/helper/libsendgrid"
+	"github.com/sofyan48/cimol/src/util/helper/logging"
 	"github.com/sofyan48/cimol/src/util/helper/provider"
 	"github.com/sofyan48/cimol/src/util/helper/request"
 )
@@ -22,6 +22,7 @@ type Transmiter struct {
 	Provider  provider.ProvidersInterface
 	Requester request.RequesterInterface
 	Sendgrid  libsendgrid.LibsendgridInterface
+	Logs      logging.LogInterface
 }
 
 // GetTransmiter ...
@@ -31,15 +32,15 @@ func GetTransmiter() *Transmiter {
 		Provider:  provider.ProvidersHandler(),
 		Requester: request.RequesterHandler(),
 		Sendgrid:  libsendgrid.LibSendgridHandler(),
+		Logs:      logging.LogHandler(),
 	}
 }
 
 // ConsumerTrans ...
 func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
-	fmt.Println("Consumer Running")
 	shardIterator, err := trs.AwsLibs.GetShardIterator()
 	if err != nil {
-		log.Println(err)
+		trs.Logs.Write("Transmitter", err.Error())
 	}
 
 	describeInput := trs.AwsLibs.GetDescribeInput()
@@ -48,7 +49,7 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 	for {
 		err := trs.AwsLibs.WaitUntil(describeInput)
 		if err != nil {
-			log.Println("error Wait: ", err)
+			trs.Logs.Write("Transmitter", err.Error())
 		}
 		done := make(chan bool)
 		go func() {
@@ -56,7 +57,7 @@ func (trs *Transmiter) ConsumerTrans(wg *sync.WaitGroup) {
 			msgInput.SetShardIterator(shardIterator)
 			data, err := trs.AwsLibs.Consumer(msgInput)
 			if err != nil {
-				log.Println(err)
+				trs.Logs.Write("Transmitter", err.Error())
 			}
 			selectionType := &entity.DataReceiveSelection{}
 			for _, i := range data.Records {

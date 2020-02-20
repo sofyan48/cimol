@@ -20,7 +20,7 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 	if checkEnvironment() {
 		_, err := trs.updateDynamoTransmitt(payload.CallbackData, "SENDED", "", payload)
 		if err != nil {
-			log.Println("Wavecell Transmitter Dynamo: ", err)
+			trs.Logs.Write("Transmitter", err.Error())
 		}
 		return
 	}
@@ -32,7 +32,7 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 
 	client, err := trs.Requester.CLIENT("POST", wavecelSendURL, wavecellReformatPayload)
 	if err != nil {
-		log.Println("Error: ", err)
+		trs.Logs.Write("Transmitter", err.Error())
 	}
 	requester := &http.Client{}
 	client.Header.Set("Content-Type", "application/json")
@@ -44,7 +44,7 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Println("Error: ", err)
+		trs.Logs.Write("Transmitter", err.Error())
 	}
 	wavecellResponse := &entity.WavecellResponse{}
 	json.Unmarshal(body, wavecellResponse)
@@ -57,7 +57,7 @@ func (trs *Transmiter) wavecellActionShard(history string, payload *entity.Histo
 		wavecellResponse.Status.Code,
 		string(bodyResultHistory), payload)
 	if err != nil {
-		log.Println("Error: ", err)
+		trs.Logs.Write("Transmitter", err.Error())
 	}
-	log.Println("SMS SEND: ", string(body))
+	trs.Logs.Write("SMS SEND", string(body))
 }

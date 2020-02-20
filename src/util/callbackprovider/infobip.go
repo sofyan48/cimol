@@ -2,7 +2,6 @@ package callbackprovider
 
 import (
 	"encoding/json"
-	"log"
 	"os"
 	"strings"
 	"sync"
@@ -17,14 +16,16 @@ func (callback *ProviderCallback) InfobipCallback(dynamo *entity.DynamoItemRespo
 		callback.InfobipCallback(dynamo, data, history)
 		return
 	}
-	callback.infobipSuccessReport(dynamo, data, history)
+	wg := &sync.WaitGroup{}
+	go callback.infobipSuccessReport(dynamo, data, history, wg)
 }
 
 func (callback *ProviderCallback) infobipSuccessReport(dynamo *entity.DynamoItemResponse,
-	data *entity.InfobipCallbackRequest, history *entity.HistoryItem) {
+	data *entity.InfobipCallbackRequest, history *entity.HistoryItem, wg *sync.WaitGroup) {
 	oldHistory, _ := json.Marshal(dynamo.History)
 	newHistory, _ := json.Marshal(data)
 	callback.AwsLib.CallbackSendUpdate(history.CallbackData, data.Results[0].Status.Name, string(oldHistory), string(newHistory))
+	wg.Done()
 }
 
 func (callback *ProviderCallback) infobipMessagesNotSuccess(dynamo *entity.DynamoItemResponse,
@@ -32,7 +33,7 @@ func (callback *ProviderCallback) infobipMessagesNotSuccess(dynamo *entity.Dynam
 	dataThirdParty := make([]entity.DataProvider, 0)
 	err := json.Unmarshal([]byte(os.Getenv("SMS_ORDER_CONF")), &dataThirdParty)
 	if err != nil {
-		log.Println(err)
+		callback.Logs.Write("Callback", err.Error())
 	}
 	historyPayload := &entity.PayloadPostNotificationRequest{}
 	_, msisdn := callback.Provider.OperatorChecker(dynamo.ReceiverAddress)

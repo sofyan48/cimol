@@ -28,7 +28,7 @@ func (trs *Transmiter) infobipActionShardOTP(history string, payload *entity.His
 	infobip.Messages = infobipMessagesSlice
 	reformatPayload, err := json.Marshal(infobip)
 	if err != nil {
-		log.Println("Error: ", err)
+		trs.Logs.Write("Transmitter", err.Error())
 	}
 	if checkEnvironment() {
 		_, err := trs.updateDynamoTransmitt(payload.CallbackData, "SENDED", " ", payload)
@@ -41,19 +41,19 @@ func (trs *Transmiter) infobipActionShardOTP(history string, payload *entity.His
 	password := os.Getenv("INFOBIP_PASSWORD")
 	client, err := trs.Requester.CLIENT("POST", os.Getenv("INFOBIP_SEND_SMS_URL"), reformatPayload)
 	if err != nil {
-		log.Println("Error: ", err)
+		trs.Logs.Write("Transmitter", err.Error())
 	}
 	requester := &http.Client{}
 	client.SetBasicAuth(username, password)
 	client.Header.Set("Content-Type", "application/json")
 	response, err := requester.Do(client)
 	if err != nil {
-		log.Println("Infobip Transmitter: ", err)
+		trs.Logs.Write("Transmitter", err.Error())
 	}
 
 	body, err := ioutil.ReadAll(response.Body)
 	resultsData := string(body)
 	trs.updateDynamoTransmitt(payload.CallbackData, "SENDED", resultsData, payload)
-	log.Println("OTP SEND: ", resultsData)
+	trs.Logs.Write("Infobip Sned", resultsData)
 
 }

@@ -3,7 +3,6 @@ package transmiter
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
@@ -13,7 +12,7 @@ func (trs *Transmiter) intercepActionShardEmail(data *entity.DynamoItemEmail) {
 	dataThirdParty := make([]entity.DataProvider, 0)
 	err := json.Unmarshal([]byte(os.Getenv("EMAIL_ORDER_CONF")), &dataThirdParty)
 	if err != nil {
-		log.Println(err)
+		trs.Logs.Write("Transmitter Email", err.Error())
 	}
 	history := &entity.EmailHistoryItem{}
 	var historyProvider string
