@@ -26,7 +26,7 @@ func (ctrl *ControllerGateway) PostNotification(context *gin.Context) {
 
 	waitgroup := &sync.WaitGroup{}
 
-	ctrl.ServiceGateway.PostNotification(payload, waitgroup)
+	ctrl.ServiceGateway.GetNotification().PostNotification(payload, waitgroup)
 
 	result := &entity.PostNotificationResponse{}
 	result.ID = payload.UUID
@@ -44,7 +44,7 @@ func (ctrl *ControllerGateway) PostNotificationEmail(context *gin.Context) {
 		return
 	}
 	waitgroup := &sync.WaitGroup{}
-	ctrl.ServiceGateway.PostNotificationEmail(payload, waitgroup)
+	ctrl.ServiceGateway.GetNotification().PostNotificationEmail(payload, waitgroup)
 	result := &entity.PostNotificationResponse{}
 	result.ID = payload.UUID
 	result.Status = "QUEUE"
@@ -60,7 +60,7 @@ func (ctrl *ControllerGateway) PostNotificationPush(context *gin.Context) {
 		rest.ResponseMessages(context, http.StatusBadRequest, err.Error())
 		return
 	}
-	ctrl.ServiceGateway.PostNotificationPush()
+	ctrl.ServiceGateway.GetNotification().PostNotificationPush()
 	result := &entity.PostNotificationResponse{}
 	result.ID = payload.UUID
 	result.Status = "QUEUE"
@@ -70,7 +70,7 @@ func (ctrl *ControllerGateway) PostNotificationPush(context *gin.Context) {
 
 // GetHistory ...
 func (ctrl *ControllerGateway) GetHistory(context *gin.Context) {
-	history, err := ctrl.ServiceGateway.GetHistory(context.Param("receiverAddress"))
+	history, err := ctrl.ServiceGateway.GetNotification().GetHistory(context.Param("receiverAddress"))
 	if err != nil {
 		rest.ResponseMessages(context, http.StatusInternalServerError, err.Error())
 		return
@@ -81,7 +81,7 @@ func (ctrl *ControllerGateway) GetHistory(context *gin.Context) {
 
 // GetByID ...
 func (ctrl *ControllerGateway) GetByID(context *gin.Context) {
-	data, err := ctrl.ServiceGateway.GetByID(context.Param("id"))
+	data, err := ctrl.ServiceGateway.GetNotification().GetByID(context.Param("id"))
 	if err != nil {
 		rest.ResponseMessages(context, http.StatusInternalServerError, err.Error())
 		return

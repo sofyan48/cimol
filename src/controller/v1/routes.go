@@ -7,7 +7,7 @@ import (
 	svcNotif "github.com/sofyan48/cimol/src/service/v1/gateway"
 
 	ctrlRcv "github.com/sofyan48/cimol/src/controller/v1/receivers"
-	svcRcv "github.com/sofyan48/cimol/src/service/v1/receivers"
+	notifRcv "github.com/sofyan48/cimol/src/controller/v1/receivers/notification"
 	"github.com/sofyan48/cimol/src/util/middleware"
 )
 
@@ -26,13 +26,13 @@ func (rLoader *V1RouterLoader) V1Router(router *gin.Engine) {
 	}
 
 	// receivers
-	rcvHandler := &ctrlRcv.ControllerReceiver{
-		ServiceReceivers: svcRcv.ReceiverHandler(),
+	notifReceiver := &ctrlRcv.ControllerReceiver{
+		Receivers: notifRcv.NotificationReceiverHandler(),
 	}
 
 	// //********* Calling Handler To Routers *********//
 	rLoader.routerPostNotification(router, postNotifHandler)
-	rLoader.routerReceiver(router, rcvHandler)
+	rLoader.routerReceiver(router, notifReceiver)
 
 }
 
@@ -55,6 +55,6 @@ func (rLoader *V1RouterLoader) routerPostNotification(router *gin.Engine, handle
 // @handler: ControllerReceiver
 func (rLoader *V1RouterLoader) routerReceiver(router *gin.Engine, handler *ctrlRcv.ControllerReceiver) {
 	group := router.Group("/v1/receiver")
-	group.POST("infobip", handler.InfobipReceiver)
-	group.POST("wavecell", handler.WavecellReceiver)
+	group.POST("infobip", handler.Receivers.InfobipReceiver)
+	group.POST("wavecell", handler.Receivers.WavecellReceiver)
 }
