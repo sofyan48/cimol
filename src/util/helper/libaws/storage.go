@@ -2,6 +2,7 @@ package libaws
 
 import (
 	"bytes"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -59,7 +60,11 @@ func (aw *Aws) UploadFile(data interface{}, ID, types, status string) {
 
 }
 
-// QueueReport ...
-func (aw *Aws) QueueReport() {
+func GetFile(path string)
 
+// GetMetricByID ...
+func (aw *Aws) GetMetricByID(ID, types, status string) {
+	now := time.Now()
+	bucketPath := os.Getenv("S3_BUCKET_NAME") + "./metric/" + types + "/" + now.Format("01-02-2006") + "/" + status + ".json"
+	fmt.Println(bucketPath)
 }
