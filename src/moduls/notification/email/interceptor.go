@@ -7,7 +7,7 @@ import (
 
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
 	"github.com/sofyan48/cimol/src/util/helper/libsendgrid"
-	"github.com/sofyan48/cimol/src/util/helper/logging"
+	"github.com/sofyan48/cimol/src/util/logging"
 )
 
 // EmailModuls ...

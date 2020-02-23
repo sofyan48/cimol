@@ -10,8 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	dynamoEntyty "github.com/sofyan48/cimol/src/entity/http/v1"
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
-	"github.com/sofyan48/cimol/src/util/helper/logging"
-	"github.com/sofyan48/cimol/src/util/helper/storage"
+	"github.com/sofyan48/cimol/src/util/logging"
+	"github.com/sofyan48/cimol/src/util/storage"
 )
 
 // Aws ...

@@ -6,7 +6,7 @@ import (
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
 	"github.com/sofyan48/cimol/src/util/helper/libaws"
 	"github.com/sofyan48/cimol/src/util/helper/libsendgrid"
-	"github.com/sofyan48/cimol/src/util/helper/provider"
+	"github.com/sofyan48/cimol/src/util/provider"
 )
 
 // NotificationGateway ...

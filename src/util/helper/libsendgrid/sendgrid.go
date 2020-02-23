@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
-	"github.com/sofyan48/cimol/src/util/helper/mailtrap"
-	"github.com/sofyan48/cimol/src/util/helper/request"
+	"github.com/sofyan48/cimol/src/util/mailtrap"
+	"github.com/sofyan48/cimol/src/util/request"
 )
 
 // Libsendgrid ...

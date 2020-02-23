@@ -9,7 +9,7 @@ import (
 
 	"github.com/sofyan48/cimol/src/config"
 	"github.com/sofyan48/cimol/src/moduls"
-	"github.com/sofyan48/cimol/src/util/helper/storage"
+	"github.com/sofyan48/cimol/src/util/storage"
 
 	"github.com/joho/godotenv"
 	"github.com/sofyan48/cimol/src/routes"

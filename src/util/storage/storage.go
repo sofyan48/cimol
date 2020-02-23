@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/sofyan48/cimol/src/util/helper/logging"
+	"github.com/sofyan48/cimol/src/util/logging"
 )
 
 // Storage ...

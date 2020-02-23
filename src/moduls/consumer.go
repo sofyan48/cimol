@@ -12,7 +12,7 @@ import (
 	"github.com/sofyan48/cimol/src/moduls/notification/email"
 	"github.com/sofyan48/cimol/src/moduls/notification/sms"
 	"github.com/sofyan48/cimol/src/util/helper/libaws"
-	"github.com/sofyan48/cimol/src/util/helper/logging"
+	"github.com/sofyan48/cimol/src/util/logging"
 )
 
 // ModulsConsumer ...

@@ -4,7 +4,7 @@ import (
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
 	"github.com/sofyan48/cimol/src/util/callbackprovider"
 	"github.com/sofyan48/cimol/src/util/helper/libaws"
-	"github.com/sofyan48/cimol/src/util/helper/logging"
+	"github.com/sofyan48/cimol/src/util/logging"
 )
 
 // Receiver ...

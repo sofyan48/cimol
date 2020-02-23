@@ -3,8 +3,8 @@ package callbackprovider
 import (
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
 	"github.com/sofyan48/cimol/src/util/helper/libaws"
-	"github.com/sofyan48/cimol/src/util/helper/logging"
-	"github.com/sofyan48/cimol/src/util/helper/provider"
+	"github.com/sofyan48/cimol/src/util/logging"
+	"github.com/sofyan48/cimol/src/util/provider"
 )
 
 // ProviderCallback ...
