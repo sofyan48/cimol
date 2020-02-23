@@ -23,8 +23,8 @@ type ModulsConsumer struct {
 	Email   email.EmailTransmiterInterface
 }
 
-// GetModulsConsumer ...
-func GetModulsConsumer() *ModulsConsumer {
+// GetModuls ...
+func GetModuls() *ModulsConsumer {
 	return &ModulsConsumer{
 		AwsLibs: libaws.AwsHAndler(),
 		Logs:    logging.LogHandler(),
@@ -33,8 +33,8 @@ func GetModulsConsumer() *ModulsConsumer {
 	}
 }
 
-// ConsumerTrans ...
-func (modul *ModulsConsumer) ConsumerTrans(wg *sync.WaitGroup) {
+// MainModuls ...
+func (modul *ModulsConsumer) MainModuls(wg *sync.WaitGroup) {
 	shardIterator, err := modul.AwsLibs.GetShardIterator()
 	if err != nil {
 		modul.Logs.Write("Transmitter", err.Error())
@@ -86,9 +86,6 @@ func (modul *ModulsConsumer) updateDynamoTransmitt(ID, status, data string, hist
 	result, err := modul.AwsLibs.UpdateDynamo(ID, status, data, history)
 	return result.GoString(), err
 }
-
-// TransferToShardReceiver ...
-func (modul *ModulsConsumer) TransferToShardReceiver(historyString string) {}
 
 func checkEnvironment() bool {
 	envi := os.Getenv("APP_ENVIRONMENT")

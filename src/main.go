@@ -39,9 +39,9 @@ func main() {
 	flag.Parse()
 	ConfigEnvironment(*environment)
 	wg := &sync.WaitGroup{}
-	modul := moduls.GetModulsConsumer()
+	modul := moduls.GetModuls()
 	wg.Add(1)
-	go modul.ConsumerTrans(wg)
+	go modul.MainModuls(wg)
 
 	startApp()
 }
