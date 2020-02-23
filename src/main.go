@@ -8,7 +8,7 @@ import (
 	"sync"
 
 	"github.com/sofyan48/cimol/src/config"
-	"github.com/sofyan48/cimol/src/transmiter"
+	"github.com/sofyan48/cimol/src/moduls"
 	"github.com/sofyan48/cimol/src/util/helper/storage"
 
 	"github.com/joho/godotenv"
@@ -39,9 +39,9 @@ func main() {
 	flag.Parse()
 	ConfigEnvironment(*environment)
 	wg := &sync.WaitGroup{}
-	transmiters := transmiter.GetTransmiter()
+	modul := moduls.GetModulsConsumer()
 	wg.Add(1)
-	go transmiters.ConsumerTrans(wg)
+	go modul.ConsumerTrans(wg)
 
 	startApp()
 }

@@ -2,10 +2,10 @@ package libaws
 
 import (
 	"bytes"
-	"fmt"
+	"encoding/json"
+	"io"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -20,18 +20,8 @@ func (aw *Aws) GetStorage() *s3.S3 {
 }
 
 // UploadFile ...
-func (aw *Aws) UploadFile(data interface{}, ID, types, status string) {
-	now := time.Now()
-	rootPath := "./metric/" + types + "/"
-	path := rootPath + now.Format("01-02-2006") + "/" + ID
-
-	aw.Storage.CreateFolderTree(path)
-	aw.Storage.CreateJSONFile(data, path, status)
-
-	// Open the file for use
-	filePath := path + "/" + status + ".json"
+func (aw *Aws) UploadFile(filePath string) error {
 	file, _ := os.Open(filePath)
-
 	// Get file size and read the file content into a buffer
 	fileInfo, _ := file.Stat()
 	var size int64 = fileInfo.Size()
@@ -51,20 +41,35 @@ func (aw *Aws) UploadFile(data interface{}, ID, types, status string) {
 	svc := aw.GetStorage()
 	_, err := svc.PutObject(params)
 	if err != nil {
-		aw.Logs.Write("AWS LIB", err.Error())
+		return err
 	}
-	err = aw.Storage.RemoveContents(rootPath)
-	if err != nil {
-		aw.Logs.Write("AWS LIB", err.Error())
-	}
+
+	return nil
 
 }
 
-func GetFile(path string)
+// Readmetric ...
+func (aw *Aws) Readmetric(key string) (interface{}, error) {
+	bucket := os.Getenv("S3_BUCKET_NAME")
+	s3Client := aw.GetStorage()
+	results, err := s3Client.GetObject(&s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+	})
 
-// GetMetricByID ...
-func (aw *Aws) GetMetricByID(ID, types, status string) {
-	now := time.Now()
-	bucketPath := os.Getenv("S3_BUCKET_NAME") + "./metric/" + types + "/" + now.Format("01-02-2006") + "/" + status + ".json"
-	fmt.Println(bucketPath)
+	if err != nil {
+		return nil, err
+	}
+
+	buf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buf, results.Body); err != nil {
+		return nil, err
+	}
+	var metricData interface{}
+	err = json.Unmarshal(buf.Bytes(), metricData)
+	if err != nil {
+		return nil, err
+	}
+
+	return metricData, nil
 }

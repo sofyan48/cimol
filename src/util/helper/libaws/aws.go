@@ -50,8 +50,8 @@ type AwsInterface interface {
 
 	// S3 Storage
 
-	UploadFile(data interface{}, ID, types, status string)
-	GetMetricByID(ID, types, status string)
+	UploadFile(filePath string) error
+	Readmetric(key string) (interface{}, error)
 }
 
 // Sessions ...
