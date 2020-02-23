@@ -48,8 +48,8 @@ func (aw *Aws) UploadFile(filePath string) error {
 
 }
 
-// Readmetric ...
-func (aw *Aws) Readmetric(key string) (interface{}, error) {
+// ReadFile ...
+func (aw *Aws) ReadFile(key string) (interface{}, error) {
 	bucket := os.Getenv("S3_BUCKET_NAME")
 	s3Client := aw.GetStorage()
 	results, err := s3Client.GetObject(&s3.GetObjectInput{

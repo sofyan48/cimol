@@ -51,7 +51,7 @@ type AwsInterface interface {
 	// S3 Storage
 
 	UploadFile(filePath string) error
-	Readmetric(key string) (interface{}, error)
+	ReadFile(key string) (interface{}, error)
 }
 
 // Sessions ...
