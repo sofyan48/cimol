@@ -30,12 +30,6 @@ vendor
 .tmp
 tmp
 
-# qa_test
-/qa_test/reports/*
-/qa_test/node_modules
-/qa_test/package-lock.json
-/qa_test/.nyc_output
-
 # go sum
 go.sum
 
