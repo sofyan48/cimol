@@ -3,15 +3,19 @@ package moduls
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
+	"os/signal"
 	"sync"
 	"time"
 
+	"github.com/Shopify/sarama"
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	entity "github.com/sofyan48/cimol/src/entity/http/v1"
 	"github.com/sofyan48/cimol/src/moduls/notification/email"
 	"github.com/sofyan48/cimol/src/moduls/notification/sms"
 	"github.com/sofyan48/cimol/src/util/helper/libaws"
+	"github.com/sofyan48/cimol/src/util/kafka"
 	"github.com/sofyan48/cimol/src/util/logging"
 )
 
@@ -21,6 +25,7 @@ type ModulsConsumer struct {
 	Logs    logging.LogInterface
 	SMS     sms.SMSModulsInterface
 	Email   email.EmailTransmiterInterface
+	Kafka   kafka.KafkaLibraryInterface
 }
 
 // GetModuls ...
@@ -30,6 +35,7 @@ func GetModuls() *ModulsConsumer {
 		Logs:    logging.LogHandler(),
 		SMS:     sms.SMSModulsHandler(),
 		Email:   email.EmailModulsHandler(),
+		Kafka:   kafka.KafkaLibraryHandler(),
 	}
 }
 
@@ -38,7 +44,39 @@ func (modul *ModulsConsumer) MainModuls(wg *sync.WaitGroup) {
 	switch os.Getenv("BROKER_MODULS") {
 	case "kinesis":
 		modul.kinesisModuls()
+	case "kafka":
+		modul.kafkaModuls()
 	}
+}
+
+// kafkaModuls ...
+func (modul *ModulsConsumer) kafkaModuls(topics string) {
+	client, err := modul.Kafka.InitNewConsumer()
+	if err != nil {
+		panic(err)
+	}
+	response, err := client.ConsumePartition(topics, 0, sarama.OffsetNewest)
+	if err != nil {
+		panic(err)
+	}
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+	doneCh := make(chan struct{})
+	go func() {
+		for {
+			eventData := &entity.StateFullFormatKafka{}
+			select {
+			case err := <-response.Errors():
+				fmt.Println(err)
+			case message := <-response.Messages():
+				log.Println("EV Receive: ", message.Timestamp, " | Topic: ", message.Topic)
+			case <-signals:
+				fmt.Println("Interrupt is detected")
+				doneCh <- struct{}{}
+			}
+		}
+	}()
+	<-doneCh
 }
 
 func (modul *ModulsConsumer) kinesisModuls() {
