@@ -35,6 +35,13 @@ func GetModuls() *ModulsConsumer {
 
 // MainModuls ...
 func (modul *ModulsConsumer) MainModuls(wg *sync.WaitGroup) {
+	switch os.Getenv("BROKER_MODULS") {
+	case "kinesis":
+		modul.kinesisModuls()
+	}
+}
+
+func (modul *ModulsConsumer) kinesisModuls() {
 	shardIterator, err := modul.AwsLibs.GetShardIterator()
 	if err != nil {
 		modul.Logs.Write("Transmitter", err.Error())
@@ -60,16 +67,7 @@ func (modul *ModulsConsumer) MainModuls(wg *sync.WaitGroup) {
 			for _, i := range data.Records {
 				json.Unmarshal([]byte(string(i.Data)), selectionType)
 				fmt.Println("Receive: ", selectionType.Type)
-				switch selectionType.Type {
-				case "sms":
-					itemSMS := &entity.DynamoItem{}
-					json.Unmarshal([]byte(string(i.Data)), itemSMS)
-					modul.SMS.IntercepActionShardSMS(itemSMS)
-				case "email":
-					itemEmail := &entity.DynamoItemEmail{}
-					json.Unmarshal([]byte(string(i.Data)), itemEmail)
-					modul.Email.IntercepActionShardEmail(itemEmail)
-				}
+				modul.kinesisTransmitter(selectionType, i)
 			}
 			close(done)
 			shardIterator = *data.NextShardIterator
@@ -78,7 +76,19 @@ func (modul *ModulsConsumer) MainModuls(wg *sync.WaitGroup) {
 		<-done
 		time.Sleep(3 * time.Second)
 	}
+}
 
+func (modul *ModulsConsumer) kinesisTransmitter(selectionType *entity.DataReceiveSelection, data *kinesis.Record) {
+	switch selectionType.Type {
+	case "sms":
+		itemSMS := &entity.DynamoItem{}
+		json.Unmarshal([]byte(string(data.Data)), itemSMS)
+		modul.SMS.IntercepActionShardSMS(itemSMS)
+	case "email":
+		itemEmail := &entity.DynamoItemEmail{}
+		json.Unmarshal([]byte(string(data.Data)), itemEmail)
+		modul.Email.IntercepActionShardEmail(itemEmail)
+	}
 }
 
 // updateDynamoTransmitt ...
